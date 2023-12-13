@@ -1,0 +1,2 @@
+GET        /api/definition                 uk.gov.hmrc.individualsotherincomeapi.controllers.DocumentationController.definition()
+GET        /api/conf/:version/*file        uk.gov.hmrc.individualsotherincomeapi.controllers.DocumentationController.specification(version, file)
