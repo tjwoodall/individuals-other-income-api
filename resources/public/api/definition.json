@@ -2,8 +2,8 @@
   "scopes": [
   ],
   "api": {
-    "name": "Hello World",
-    "description": "A 'hello world' example of an API on the HMRC API Developer Hub.",
+    "name": "Individuals Other Income (MTD)",
+    "description": "An API for providing individual other income data",
     "context": "individuals/other-income",
     "categories": ["INCOME_TAX_MTD"],
     "versions": [
