@@ -10,8 +10,7 @@
     "allOtherIncomeReceivedWhilstAbroad": {"$ref": "../other_definitions.json#/definitions/allOtherIncomeReceivedWhilstAbroad"},
     "overseasIncomeAndGains": {"$ref": "../other_definitions.json#/definitions/overseasIncomeAndGains"},
     "chargeableForeignBenefitsAndGifts": {"$ref": "../other_definitions.json#/definitions/chargeableForeignBenefitsAndGifts"},
-    "omittedForeignIncome": {"$ref": "../other_definitions.json#/definitions/omittedForeignIncome"},
-    "links": {"$ref": "../other_definitions.json#/definitions/links"}
+    "omittedForeignIncome": {"$ref": "../other_definitions.json#/definitions/omittedForeignIncome"}
   },
   "required": ["submittedOn"]
 }
