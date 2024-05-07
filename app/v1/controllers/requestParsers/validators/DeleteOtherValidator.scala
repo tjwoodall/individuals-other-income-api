@@ -42,7 +42,7 @@ class DeleteOtherValidator @Inject() (implicit appConfig: AppConfig) extends Val
 
   private def parameterRuleValidation: DeleteOtherRawData => List[List[MtdError]] = (data: DeleteOtherRawData) => {
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear)
+      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear.year)
     )
   }
 

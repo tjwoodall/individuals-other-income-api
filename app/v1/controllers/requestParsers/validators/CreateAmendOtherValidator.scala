@@ -26,7 +26,7 @@ import v1.models.request.createAmendOther._
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendOtherValidator @Inject() (implicit appConfig: AppConfig) extends Validator[CreateAmendOtherRawData] with ValueFormatErrorMessages {
+class CreateAmendOtherValidator @Inject() (implicit appConfig: AppConfig) extends Validator[CreateAmendOtherRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidator, bodyValueValidator)
 
@@ -43,7 +43,7 @@ class CreateAmendOtherValidator @Inject() (implicit appConfig: AppConfig) extend
 
   private def parameterRuleValidation: CreateAmendOtherRawData => List[List[MtdError]] = { data =>
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear)
+      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear.year)
     )
   }
 
@@ -59,9 +59,11 @@ class CreateAmendOtherValidator @Inject() (implicit appConfig: AppConfig) extend
     List(
       flattenErrors(
         List(
-          requestBodyData.postCessationReceipts.map(_.zipWithIndex.flatMap{ case (data, index) =>
+          requestBodyData.postCessationReceipts
+            .map(_.zipWithIndex.flatMap { case (data, index) =>
               validatePostCessationReceiptsItem(data, index)
-          }).getOrElse(NoValidationErrors)
+            })
+            .getOrElse(NoValidationErrors)
             .toList,
           requestBodyData.businessReceipts
             .map(_.zipWithIndex.flatMap { case (data, index) =>
@@ -95,13 +97,14 @@ class CreateAmendOtherValidator @Inject() (implicit appConfig: AppConfig) extend
         )
     ).flatten
   }
-    private def validatePostCessationReceiptsItem(postCessationReceiptsItem: PostCessationReceiptsItem, arrayIndex: Int): List[MtdError] = {
-      List(
-        DateFormatValidation.validateOptional(
-          date = postCessationReceiptsItem.dateBusinessCeased,
-          path = Some(s"/postCessationReceipts/$arrayIndex/dateBusinessCeased")
-        )
-      ).flatten
+
+  private def validatePostCessationReceiptsItem(postCessationReceiptsItem: PostCessationReceiptsItem, arrayIndex: Int): List[MtdError] = {
+    List(
+      DateFormatValidation.validateOptional(
+        date = postCessationReceiptsItem.dateBusinessCeased,
+        path = Some(s"/postCessationReceipts/$arrayIndex/dateBusinessCeased")
+      )
+    ).flatten
   }
 
   private def validateAllOtherIncomeReceivedWhilstAbroad(allOtherIncomeReceivedWhilstAbroad: AllOtherIncomeReceivedWhilstAbroadItem,

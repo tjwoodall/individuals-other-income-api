@@ -18,7 +18,9 @@ package api.controllers.requestParsers.validators.validations
 
 import api.models.errors.{MtdError, ValueFormatError}
 
-object DecimalValueValidation extends ValueFormatErrorMessages {
+object DecimalValueValidation {
+
+  val ZERO_MINIMUM_INCLUSIVE = "The value must be between 0 and 99999999999.99"
 
   def validateOptional(amount: Option[BigDecimal],
                        maxScale: Int = 2,

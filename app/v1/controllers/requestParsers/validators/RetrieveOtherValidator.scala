@@ -42,7 +42,7 @@ class RetrieveOtherValidator @Inject() (implicit appConfig: AppConfig) extends V
 
   private def parameterRuleValidation: RetrieveOtherRawData => List[List[MtdError]] = (data: RetrieveOtherRawData) => {
     List(
-      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear)
+      TaxYearNotSupportedValidation.validate(data.taxYear, appConfig.minimumPermittedTaxYear.year)
     )
   }
 
