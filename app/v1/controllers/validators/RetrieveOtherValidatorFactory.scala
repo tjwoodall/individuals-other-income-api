@@ -17,14 +17,14 @@
 package v1.controllers.validators
 
 import config.AppConfig
-import play.api.libs.json.JsValue
+import v1.controllers.validators.RetrieveOtherValidator
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendOtherValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveOtherValidatorFactory @Inject()(appConfig: AppConfig) {
 
-  def validator(nino: String, taxYear: String, body: JsValue, appConfig: AppConfig) =
-    new CreateAmendOtherValidator(nino, taxYear, body, appConfig)
+  def validator(nino: String, taxYear: String, appConfig: AppConfig) =
+    new RetrieveOtherValidator(nino, taxYear, appConfig)
 
 }

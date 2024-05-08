@@ -1,6 +1,17 @@
 /*
  * Copyright 2024 HM Revenue & Customs
  *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package v1.controllers.validators
@@ -35,9 +46,7 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
 
     def singleError(error: MtdError): Left[ErrorWrapper, Nothing] = Left(ErrorWrapper(correlationId, error))
 
-    MockedAppConfig.minimumPermittedTaxYear
-      .returns(TaxYear.ending(2020))
-
+    MockedAppConfig.minimumPermittedTaxYear returns TaxYear.ending(2020)
   }
 
   private def expectValueFormatError(body: JsNumber => JsValue, expectedPath: String): Unit = s"for $expectedPath" when {
@@ -52,41 +61,35 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
   "running a validation" should {
     "return no errors" when {
       "a valid request is supplied" in new Test {
-        validate(body = validRequestBodyJson) shouldBe
-          Right(CreateAmendOtherRequest(parsedNino, parsedTaxYear, requestBodyModel))
+        validate(body = validRequestBodyJson) shouldBe Right(CreateAmendOtherRequest(parsedNino, parsedTaxYear, requestBodyModel))
       }
     }
 
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in new Test {
-        validate("A12344A", validTaxYear, validRequestBodyJson) shouldBe
-          singleError(NinoFormatError)
+        validate("A12344A", validTaxYear, validRequestBodyJson) shouldBe singleError(NinoFormatError)
       }
     }
 
     "return TaxYearFormatError error" when {
       "an invalid tax year is supplied" in new Test {
-        validate(validNino, "20178", validRequestBodyJson) shouldBe
-          singleError(TaxYearFormatError)
+        validate(validNino, "20178", validRequestBodyJson) shouldBe singleError(TaxYearFormatError)
       }
     }
 
     "return RuleTaxYearNotSupportedError error" when {
       "an invalid tax year is supplied" in new Test {
-        validate(validNino, "2017-18", validRequestBodyJson) shouldBe
-          singleError(RuleTaxYearNotSupportedError)
+        validate(validNino, "2017-18", validRequestBodyJson) shouldBe singleError(RuleTaxYearNotSupportedError)
       }
     }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
       "an empty JSON body is submitted" in new Test {
-        validate(body = JsObject.empty) shouldBe
-          singleError(RuleIncorrectOrEmptyBodyError)
+        validate(body = JsObject.empty) shouldBe singleError(RuleIncorrectOrEmptyBodyError)
       }
 
       "a non-empty JSON body is submitted without any expected fields" in new Test {
-        validate(body = Json.parse("""{"field": "value"}""")) shouldBe
-          singleError(RuleIncorrectOrEmptyBodyError)
+        validate(body = Json.parse("""{"field": "value"}""")) shouldBe singleError(RuleIncorrectOrEmptyBodyError)
       }
 
       "the submitted request body is not in the correct format" in new Test {
@@ -97,8 +100,7 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
             |   }
             |}""".stripMargin)
 
-        validate(body = invalidRequestBodyJson) shouldBe
-          singleError(RuleIncorrectOrEmptyBodyError.withPath("/overseasIncomeAndGains/gainAmount"))
+        validate(body = invalidRequestBodyJson) shouldBe singleError(RuleIncorrectOrEmptyBodyError.withPath("/overseasIncomeAndGains/gainAmount"))
       }
 
       "the submitted request body has missing mandatory fields" in new Test {
@@ -238,8 +240,8 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
       expectValueFormatError(fromField("amount"), "/omittedForeignIncome/amount")
     }
 
-    "return ValueFormatError error (multiple failures)" when {
-      "multiple fields fail value validation" in new Test {
+    "return multiple errors" when {
+      "multiple fields fail validation" in new Test {
 
         private val multipleErrorRequestBodyJson: JsValue = Json.parse(
           """
