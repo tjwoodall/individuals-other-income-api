@@ -16,16 +16,16 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.Validator
-import config.AppConfig
-import v1.models.request.retrieveOther.RetrieveOtherRequest
+import api.controllers.validators.{MockValidatorFactory, Validator}
+import org.scalamock.handlers.CallHandler
+import play.api.libs.json.JsValue
+import v1.models.request.createAmendOther.CreateAmendOtherRequest
 
-import javax.inject.{Inject, Singleton}
+trait MockCreateAmendOtherValidatorFactory extends MockValidatorFactory[CreateAmendOtherRequest] {
 
-@Singleton
-class RetrieveOtherValidatorFactory @Inject() (appConfig: AppConfig) {
+  val mockCreateAmendOtherValidatorFactory: CreateAmendOtherValidatorFactory = mock[CreateAmendOtherValidatorFactory]
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveOtherRequest] =
-    new RetrieveOtherValidator(nino, taxYear, appConfig)
+  def validator(): CallHandler[Validator[CreateAmendOtherRequest]] =
+    (mockCreateAmendOtherValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
 
 }

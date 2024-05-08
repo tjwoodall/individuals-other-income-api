@@ -16,16 +16,15 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.Validator
-import config.AppConfig
-import v1.models.request.retrieveOther.RetrieveOtherRequest
+import api.controllers.validators.{MockValidatorFactory, Validator}
+import org.scalamock.handlers.CallHandler
+import v1.models.request.deleteOther.DeleteOtherRequest
 
-import javax.inject.{Inject, Singleton}
+trait MockDeleteOtherValidatorFactory extends MockValidatorFactory[DeleteOtherRequest] {
 
-@Singleton
-class RetrieveOtherValidatorFactory @Inject() (appConfig: AppConfig) {
+  val mockDeleteOtherValidatorFactory: DeleteOtherValidatorFactory = mock[DeleteOtherValidatorFactory]
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveOtherRequest] =
-    new RetrieveOtherValidator(nino, taxYear, appConfig)
+  def validator(): CallHandler[Validator[DeleteOtherRequest]] =
+    (mockDeleteOtherValidatorFactory.validator(_: String, _: String)).expects(*, *)
 
 }

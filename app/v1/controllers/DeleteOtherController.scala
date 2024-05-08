@@ -21,8 +21,7 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v1.controllers.requestParsers.DeleteOtherRequestParser
-import v1.models.request.deleteOther.DeleteOtherRawData
+import v1.controllers.validators.DeleteOtherValidatorFactory
 import v1.services.DeleteOtherService
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DeleteOtherController @Inject() (val authService: EnrolmentsAuthService,
                                        val lookupService: MtdIdLookupService,
-                                       parser: DeleteOtherRequestParser,
+                                       validatorFactory: DeleteOtherValidatorFactory,
                                        service: DeleteOtherService,
                                        auditService: AuditService,
                                        cc: ControllerComponents,
@@ -48,13 +47,10 @@ class DeleteOtherController @Inject() (val authService: EnrolmentsAuthService,
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: DeleteOtherRawData = DeleteOtherRawData(
-        nino = nino,
-        taxYear = taxYear
-      )
+      val validator = validatorFactory.validator(nino = nino, taxYear = taxYear)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.delete)
         .withAuditing(AuditHandler(
           auditService = auditService,
@@ -64,7 +60,7 @@ class DeleteOtherController @Inject() (val authService: EnrolmentsAuthService,
           requestBody = None
         ))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

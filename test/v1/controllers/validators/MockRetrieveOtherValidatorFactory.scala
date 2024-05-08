@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteOther
+package v1.controllers.validators
 
-import api.models.request.RawData
+import api.controllers.validators.{MockValidatorFactory, Validator}
+import org.scalamock.handlers.CallHandler
+import v1.models.request.retrieveOther.RetrieveOtherRequest
 
-case class DeleteOtherRawData(nino: String, taxYear: String) extends RawData
+trait MockRetrieveOtherValidatorFactory extends MockValidatorFactory[RetrieveOtherRequest] {
+
+  val mockRetrieveOtherValidatorFactory: RetrieveOtherValidatorFactory = mock[RetrieveOtherValidatorFactory]
+
+  def validator(): CallHandler[Validator[RetrieveOtherRequest]] =
+    (mockRetrieveOtherValidatorFactory.validator(_: String, _: String)).expects(*, *)
+
+}
