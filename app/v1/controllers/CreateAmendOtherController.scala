@@ -20,10 +20,9 @@ import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContentAsJson, ControllerComponents}
+import play.api.mvc.{Action, ControllerComponents}
 import utils.IdGenerator
-import v1.controllers.requestParsers.CreateAmendOtherRequestParser
-import v1.models.request.createAmendOther.CreateAmendOtherRawData
+import v1.controllers.validators.CreateAmendOtherValidatorFactory
 import v1.services.CreateAmendOtherService
 
 import javax.inject.{Inject, Singleton}
@@ -32,7 +31,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class CreateAmendOtherController @Inject() (val authService: EnrolmentsAuthService,
                                             val lookupService: MtdIdLookupService,
-                                            parser: CreateAmendOtherRequestParser,
+                                            validatorFactory: CreateAmendOtherValidatorFactory,
                                             service: CreateAmendOtherService,
                                             auditService: AuditService,
                                             cc: ControllerComponents,
@@ -48,14 +47,11 @@ class CreateAmendOtherController @Inject() (val authService: EnrolmentsAuthServi
   def createAmendOther(nino: String, taxYear: String): Action[JsValue] =
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
-      val rawData: CreateAmendOtherRawData = CreateAmendOtherRawData(
-        nino = nino,
-        taxYear = taxYear,
-        body = AnyContentAsJson(request.body)
-      )
+
+      val validator = validatorFactory.validator(nino, taxYear, request.body)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.createAmend)
         .withAuditing(AuditHandler(
           auditService = auditService,
@@ -67,7 +63,7 @@ class CreateAmendOtherController @Inject() (val authService: EnrolmentsAuthServi
         ))
         .withNoContentResult(successStatus = OK)
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

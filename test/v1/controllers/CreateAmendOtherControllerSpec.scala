@@ -24,9 +24,9 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
-import play.api.mvc.{AnyContentAsJson, Result}
+import play.api.mvc.Result
+import v1.controllers.validators.MockCreateAmendOtherValidatorFactory
 import v1.fixtures.other.CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel}
-import v1.mocks.requestParsers.MockCreateAmendOtherRequestParser
 import v1.mocks.services.MockCreateAmendOtherService
 import v1.models.request.createAmendOther._
 
@@ -36,18 +36,12 @@ import scala.concurrent.Future
 class CreateAmendOtherControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
-    with MockCreateAmendOtherRequestParser
+    with MockCreateAmendOtherValidatorFactory
     with MockAuditService
     with MockCreateAmendOtherService
     with MockAppConfig {
 
   val taxYear: String = "2019-20"
-
-  val rawData: CreateAmendOtherRawData = CreateAmendOtherRawData(
-    nino = nino,
-    taxYear = taxYear,
-    body = AnyContentAsJson(requestBodyJson)
-  )
 
   val requestData: CreateAmendOtherRequest = CreateAmendOtherRequest(
     nino = Nino(nino),
@@ -58,9 +52,7 @@ class CreateAmendOtherControllerSpec
   "CreateAmendOtherController" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-        MockCreateAmendOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendOtherService
           .createAmend(requestData)
@@ -77,17 +69,13 @@ class CreateAmendOtherControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendOtherRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-        MockCreateAmendOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAmendOtherService
           .createAmend(requestData)
@@ -103,7 +91,7 @@ class CreateAmendOtherControllerSpec
     val controller = new CreateAmendOtherController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendOtherRequestParser,
+      validatorFactory = mockCreateAmendOtherValidatorFactory,
       service = mockCreateAmendOtherService,
       auditService = mockAuditService,
       cc = cc,

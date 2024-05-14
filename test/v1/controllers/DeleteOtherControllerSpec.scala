@@ -25,9 +25,9 @@ import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteOtherRequestParser
+import v1.controllers.validators.MockDeleteOtherValidatorFactory
 import v1.mocks.services.MockDeleteOtherService
-import v1.models.request.deleteOther.{DeleteOtherRawData, DeleteOtherRequest}
+import v1.models.request.deleteOther.DeleteOtherRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,15 +37,10 @@ class DeleteOtherControllerSpec
     with ControllerTestRunner
     with MockDeleteOtherService
     with MockAuditService
-    with MockDeleteOtherRequestParser
+    with MockDeleteOtherValidatorFactory
     with MockAppConfig {
 
   val taxYear: String = "2019-20"
-
-  val rawData: DeleteOtherRawData = DeleteOtherRawData(
-    nino = nino,
-    taxYear = taxYear
-  )
 
   val requestData: DeleteOtherRequest = DeleteOtherRequest(
     nino = Nino(nino),
@@ -55,9 +50,7 @@ class DeleteOtherControllerSpec
   "DeleteOtherController" should {
     "return a successful response with status 204 (No Content)" when {
       "the request received is valid" in new Test {
-        MockDeleteOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteOtherService
           .delete(requestData)
@@ -69,17 +62,13 @@ class DeleteOtherControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockDeleteOtherRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError)
       }
 
       "service returns an error" in new Test {
-        MockDeleteOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteOtherService
           .delete(requestData)
@@ -95,7 +84,7 @@ class DeleteOtherControllerSpec
     val controller = new DeleteOtherController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockDeleteOtherRequestParser,
+      validatorFactory = mockDeleteOtherValidatorFactory,
       service = mockDeleteOtherService,
       auditService = mockAuditService,
       cc = cc,

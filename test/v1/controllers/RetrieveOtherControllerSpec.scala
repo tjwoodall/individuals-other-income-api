@@ -22,10 +22,10 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.mvc.Result
+import v1.controllers.validators.MockRetrieveOtherValidatorFactory
 import v1.fixtures.RetrieveOtherControllerFixture.fullRetrieveOtherResponse
-import v1.mocks.requestParsers.MockRetrieveOtherRequestParser
 import v1.mocks.services.MockRetrieveOtherService
-import v1.models.request.retrieveOther.{RetrieveOtherRawData, RetrieveOtherRequest}
+import v1.models.request.retrieveOther.RetrieveOtherRequest
 import v1.models.response.retrieveOther._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -35,15 +35,10 @@ class RetrieveOtherControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveOtherService
-    with MockRetrieveOtherRequestParser
+    with MockRetrieveOtherValidatorFactory
     with MockAppConfig {
 
   val taxYear: String = "2019-20"
-
-  val rawData: RetrieveOtherRawData = RetrieveOtherRawData(
-    nino = nino,
-    taxYear = taxYear
-  )
 
   val requestData: RetrieveOtherRequest = RetrieveOtherRequest(
     nino = Nino(nino),
@@ -123,9 +118,7 @@ class RetrieveOtherControllerSpec
   "RetrieveOtherController" should {
     "return OK" when {
       "the request is valid" in new Test {
-        MockRetrieveOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherService
           .retrieve(requestData)
@@ -137,17 +130,13 @@ class RetrieveOtherControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveOtherRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError, None)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveOtherRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherService
           .retrieve(requestData)
@@ -163,7 +152,7 @@ class RetrieveOtherControllerSpec
     val controller = new RetrieveOtherController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveOtherRequestParser,
+      validatorFactory = mockRetrieveOtherValidatorFactory,
       service = mockRetrieveOtherService,
       cc = cc,
       idGenerator = mockIdGenerator

@@ -16,6 +16,7 @@
 
 package config
 
+import api.models.domain.TaxYear
 import com.typesafe.config.Config
 import play.api.{ConfigLoader, Configuration}
 import routing.Version
@@ -56,7 +57,7 @@ trait AppConfig {
   def tysIfsEnvironmentHeaders: Option[Seq[String]]
 
   def apiGatewayContext: String
-  def minimumPermittedTaxYear: Int
+  def minimumPermittedTaxYear: TaxYear
 
   // API Config
   def apiStatus(version: Version): String
@@ -92,7 +93,7 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   val tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
 
   val apiGatewayContext: String                    = config.getString("api.gateway.context")
-  val minimumPermittedTaxYear: Int                 = config.getInt("minimumPermittedTaxYear")
+  val minimumPermittedTaxYear: TaxYear             = TaxYear.ending(config.getInt("minimumPermittedTaxYear"))
   val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 
   def allowRequestCannotBeFulfilledHeader(version: Version): Boolean =

@@ -21,8 +21,7 @@ import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v1.controllers.requestParsers.RetrieveOtherRequestParser
-import v1.models.request.retrieveOther.RetrieveOtherRawData
+import v1.controllers.validators.RetrieveOtherValidatorFactory
 import v1.services.RetrieveOtherService
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveOtherController @Inject() (val authService: EnrolmentsAuthService,
                                          val lookupService: MtdIdLookupService,
-                                         parser: RetrieveOtherRequestParser,
+                                         validatorFactory: RetrieveOtherValidatorFactory,
                                          service: RetrieveOtherService,
                                          cc: ControllerComponents,
                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
@@ -47,18 +46,15 @@ class RetrieveOtherController @Inject() (val authService: EnrolmentsAuthService,
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: RetrieveOtherRawData = RetrieveOtherRawData(
-        nino = nino,
-        taxYear = taxYear
-      )
+      val validator = validatorFactory.validator(nino = nino, taxYear = taxYear)
 
       val requestHandler =
         RequestHandler
-          .withParser(parser)
+          .withValidator(validator)
           .withService(service.retrieve)
           .withPlainJsonResult()
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }
