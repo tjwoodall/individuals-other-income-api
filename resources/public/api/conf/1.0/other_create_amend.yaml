@@ -73,6 +73,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
           FORMAT_VALUE:
             $ref: './common/errors.yaml#/components/examples/formatValue'
+          FORMAT_DATE:
+            $ref: './common/errors.yaml#/components/examples/formatDate'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
           RULE_UNALIGNED_CESSATION_TAX_YEAR:
