@@ -15,8 +15,6 @@ description: |
   | DYNAMIC                          | The following response values will change to correspond to the values submitted in the request:<br> • taxYear<br> • submittedOn |
   | STATEFUL                         | Performs a stateful retrieve.                                                                                                   |
 
-tags:
-  - Other Income
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYearMinimum2021'
