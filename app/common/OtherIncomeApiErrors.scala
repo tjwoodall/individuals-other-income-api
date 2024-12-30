@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package common
 
-import cats.data.Validated
-import cats.implicits._
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers._
-import shared.models.domain.TaxYear
+import play.api.http.Status._
 import shared.models.errors.MtdError
-import v1.models.request.retrieveOther.RetrieveOtherRequest
 
-class RetrieveOtherValidator(nino: String, taxYear: String) extends Validator[RetrieveOtherRequest] {
-  private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2019-20"))
-
-  override def validate: Validated[Seq[MtdError], RetrieveOtherRequest] =
-    (
-      ResolveNino(nino),
-      resolveTaxYear(taxYear)
-    ).mapN(RetrieveOtherRequest)
-
-}
+object RuleUnalignedCessationTaxYear extends MtdError("RULE_UNALIGNED_CESSATION_TAX_YEAR", "The tax year provided must be the same as the tax year of income to be taxed", BAD_REQUEST)
