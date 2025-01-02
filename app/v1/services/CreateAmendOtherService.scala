@@ -18,7 +18,6 @@ package v1.services
 
 import cats.implicits._
 import common.RuleUnalignedCessationTaxYear
-import config.OtherIncomeFeatureSwitches
 import shared.config.SharedAppConfig
 import shared.controllers.RequestContext
 import shared.models.errors._
@@ -34,13 +33,7 @@ class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector, a
 
   def createAmend(request: CreateAmendOtherRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
-    val featureSwitchedRequest = if (OtherIncomeFeatureSwitches()(appConfig).isPostCessationReceiptsEnabled) {
-      request
-    } else {
-      request.copy(body = request.body.copy(postCessationReceipts = None))
-    }
-
-    connector.createAmend(featureSwitchedRequest).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    connector.createAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
