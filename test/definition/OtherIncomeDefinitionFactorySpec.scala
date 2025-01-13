@@ -21,7 +21,7 @@ import shared.config.Deprecation.NotDeprecated
 import shared.config.MockSharedAppConfig
 import shared.definition.APIStatus.BETA
 import shared.definition.{APIDefinition, APIVersion, Definition}
-import shared.routing.Version1
+import shared.routing.{Version1, Version2}
 import shared.utils.UnitSpec
 
 class OtherIncomeDefinitionFactorySpec extends UnitSpec {
@@ -34,9 +34,11 @@ class OtherIncomeDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version1) returns true
-        MockedSharedAppConfig.deprecationFor(Version1).returns(NotDeprecated.valid).anyNumberOfTimes()
+        List(Version1, Version2).foreach { version =>
+          MockedSharedAppConfig.apiStatus(version) returns "BETA"
+          MockedSharedAppConfig.endpointsEnabled(version) returns true
+          MockedSharedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
+        }
 
         apiDefinitionFactory.definition shouldBe
           Definition(
@@ -48,6 +50,11 @@ class OtherIncomeDefinitionFactorySpec extends UnitSpec {
               versions = List(
                 APIVersion(
                   Version1,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  Version2,
                   status = BETA,
                   endpointsEnabled = true
                 )
