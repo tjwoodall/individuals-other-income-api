@@ -1,6 +1,6 @@
 summary: Retrieve Other Income
 description: |
-  This endpoint enables you to retrieve other income:
+  This endpoint enables you to retrieve details of other income:
   business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income. 
   A National Insurance number and tax year must be provided.
   
