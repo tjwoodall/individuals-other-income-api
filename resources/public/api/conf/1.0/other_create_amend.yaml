@@ -1,7 +1,7 @@
 summary: Create and Amend Other Income
 description: |
-  This endpoint allows the developer to create and amend other income:
-  business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income.  
+  This endpoint enables you to create and amend other income:
+  business receipts, overseas income and gains, chargeable foreign benefits and gifts, omitted foreign income, and all other income received whilst abroad.  
   A National Insurance number and tax year must be provided.
 
   ###  Test data
