@@ -17,7 +17,7 @@
 package v2.services
 
 import cats.implicits._
-import common.RuleUnalignedCessationTaxYear
+import common.{RuleOutsideAmendmentWindowError, RuleUnalignedCessationTaxYear}
 import shared.config.SharedAppConfig
 import shared.controllers.RequestContext
 import shared.models.errors._
@@ -48,8 +48,10 @@ class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector, a
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "INVALID_CORRELATION_ID"       -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW"     -> RuleOutsideAmendmentWindowError,
+      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
+
     )
 
     errors ++ extraTysErrors

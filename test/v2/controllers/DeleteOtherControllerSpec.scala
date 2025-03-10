@@ -25,7 +25,7 @@ import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.MockAuditService
 import v2.controllers.validators.MockDeleteOtherValidatorFactory
 import v2.mocks.services.MockDeleteOtherService
@@ -108,7 +108,7 @@ class DeleteOtherControllerSpec
         detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
-          versionNumber = Version1.name,
+          versionNumber = Version2.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,

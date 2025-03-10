@@ -20,3 +20,5 @@ import play.api.http.Status._
 import shared.models.errors.MtdError
 
 object RuleUnalignedCessationTaxYear extends MtdError("RULE_UNALIGNED_CESSATION_TAX_YEAR", "The tax year provided must be the same as the tax year of income to be taxed", BAD_REQUEST)
+
+object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)

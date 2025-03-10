@@ -19,7 +19,7 @@ package v2.controllers
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.controllers.validators.DeleteOtherValidatorFactory
@@ -59,7 +59,7 @@ class DeleteOtherController @Inject() (val authService: EnrolmentsAuthService,
           auditService = auditService,
           auditType = "DeleteOtherIncome",
           transactionName = "delete-other-income",
-          apiVersion = Version1,
+          apiVersion = Version2,
           params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = None
         ))
