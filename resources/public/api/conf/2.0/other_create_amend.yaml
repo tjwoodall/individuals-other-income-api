@@ -11,6 +11,7 @@ description: |
   | Header Value (Gov-Test-Scenario) | Scenario                                                                                                  |
   | -------------------------------- | --------------------------------------------------------------------------------------------------------- |
   | N/A - DEFAULT                    | Simulates success response.                                                                               |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.           |
   | UNALIGNED_CESSATION_TAX_YEAR     | Simulates the scenario where the tax year provided is not the same as the tax year of income to be taxed. |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request could not be processed.                                          |
   | STATEFUL                         | Performs a stateful create or update.                                                                     |
@@ -84,6 +85,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
           RULE_DATE_RANGE_INVALID:
               $ref: './common/errors.yaml#/components/examples/ruleDateRangeInvalid'
+          RULE_OUTSIDE_AMENDMENT_WINDOW:
+            $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
 
   "403":
     description: Forbidden

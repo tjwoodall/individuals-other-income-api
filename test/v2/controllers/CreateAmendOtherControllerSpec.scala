@@ -25,7 +25,7 @@ import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.domain.TaxYear
 import shared.models.errors._
 import shared.models.outcomes.ResponseWrapper
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.MockAuditService
 import v2.controllers.validators.MockCreateAmendOtherValidatorFactory
 import v2.fixtures.other.CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel}
@@ -115,7 +115,7 @@ class CreateAmendOtherControllerSpec
         detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
-          versionNumber = Version1.name,
+          versionNumber = Version2.name,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,

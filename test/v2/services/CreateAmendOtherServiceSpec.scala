@@ -16,7 +16,7 @@
 
 package v2.services
 
-import common.RuleUnalignedCessationTaxYear
+import common.{RuleOutsideAmendmentWindowError, RuleUnalignedCessationTaxYear}
 import play.api.Configuration
 import shared.config.MockSharedAppConfig
 import shared.controllers.EndpointLogContext
@@ -107,6 +107,7 @@ class CreateAmendOtherServiceSpec extends ServiceSpec {
 
         val extraTysErrors = List(
           ("INVALID_CORRELATION_ID", InternalError),
+          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 

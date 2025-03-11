@@ -20,7 +20,7 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
-import shared.routing.Version1
+import shared.routing.Version2
 import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import shared.utils.IdGenerator
 import v2.controllers.validators.CreateAmendOtherValidatorFactory
@@ -60,7 +60,7 @@ class CreateAmendOtherController @Inject() (val authService: EnrolmentsAuthServi
           auditService = auditService,
           auditType = "CreateAmendOtherIncome",
           transactionName = "create-amend-other-income",
-          apiVersion = Version1,
+          apiVersion = Version2,
           params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = Some(request.body),
           includeResponse = true
