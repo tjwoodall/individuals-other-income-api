@@ -18,6 +18,7 @@ package v1.mocks.connectors
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.CreateAmendOtherConnector
@@ -25,7 +26,7 @@ import v1.models.request.createAmendOther.CreateAmendOtherRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendOtherConnector extends MockFactory {
+trait MockCreateAmendOtherConnector extends TestSuite with MockFactory {
 
   val mockCreateAmendOtherConnector: CreateAmendOtherConnector = mock[CreateAmendOtherConnector]
 
