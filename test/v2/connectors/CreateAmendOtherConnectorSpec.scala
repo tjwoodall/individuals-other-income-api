@@ -19,6 +19,7 @@ package v2.connectors
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.fixtures.other.CreateAmendOtherFixtures.requestBodyModel
 import v2.models.request.createAmendOther.CreateAmendOtherRequest
 
@@ -50,7 +51,7 @@ class CreateAmendOtherConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/other/AA111111A/2019-20",
+          url = url"$baseUrl/income-tax/income/other/AA111111A/2019-20",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
@@ -63,7 +64,7 @@ class CreateAmendOtherConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/other/23-24/AA111111A",
+          url = url"$baseUrl/income-tax/income/other/23-24/AA111111A",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))

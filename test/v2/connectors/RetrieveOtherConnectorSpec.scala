@@ -20,6 +20,7 @@ import org.scalamock.handlers.CallHandler
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.models.request.retrieveOther.RetrieveOtherRequest
 import v2.models.response.retrieveOther.RetrieveOtherResponse
 
@@ -79,14 +80,14 @@ class RetrieveOtherConnectorSpec extends ConnectorSpec {
     protected def stubHttpResponse(
         outcome: DownstreamOutcome[RetrieveOtherResponse]): CallHandler[Future[DownstreamOutcome[RetrieveOtherResponse]]]#Derived = {
       willGet(
-        url = s"$baseUrl/income-tax/income/other/$nino/${taxYear.asMtd}"
+        url = url"$baseUrl/income-tax/income/other/$nino/${taxYear.asMtd}"
       ).returns(Future.successful(outcome))
     }
 
     protected def stubTysHttpResponse(
         outcome: DownstreamOutcome[RetrieveOtherResponse]): CallHandler[Future[DownstreamOutcome[RetrieveOtherResponse]]]#Derived = {
       willGet(
-        url = s"$baseUrl/income-tax/income/other/${taxYear.asTysDownstream}/$nino"
+        url = url"$baseUrl/income-tax/income/other/${taxYear.asTysDownstream}/$nino"
       ).returns(Future.successful(outcome))
     }
 
