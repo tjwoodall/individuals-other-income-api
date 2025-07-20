@@ -12,7 +12,7 @@
         "description": "Details of sum received related to the carrying on of the trade after a business ceases to carry on.",
         "properties": {
           "customerReference": {
-            "type": "String",
+            "type": "string",
             "description": "A reference the user supplies to identify the other income. Must be between 1 and 90 characters in length.",
             "example": "String"
           },
