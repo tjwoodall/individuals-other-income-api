@@ -42,7 +42,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "taxYearIncomeToBeTaxed": {
             "type": "string",
@@ -68,7 +68,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "taxYear": {
             "type": "string",
@@ -99,7 +99,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "taxTakenOff": {
             "type": "number",
@@ -107,7 +107,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "specialWithholdingTax": {
             "type": "number",
@@ -115,7 +115,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "foreignTaxCreditRelief": {
             "type": "boolean",
@@ -128,7 +128,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "residentialFinancialCostAmount": {
             "type": "number",
@@ -136,7 +136,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           },
           "broughtFwdResidentialFinancialCostAmount": {
             "type": "number",
@@ -144,7 +144,7 @@
             "example": "1999.99",
             "multipleOf": 0.01,
             "minimum": 0,
-            "maximum:": 99999999999.99
+            "maximum": 99999999999.99
           }
         },
         "required": [
@@ -163,7 +163,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         }
       },
       "required": [
@@ -180,7 +180,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         },
         "protectedForeignIncomeSourceBenefit": {
           "type": "number",
@@ -188,7 +188,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         },
         "protectedForeignIncomeOnwardGift": {
           "type": "number",
@@ -196,7 +196,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         },
         "benefitReceivedAsASettler": {
           "type": "number",
@@ -204,7 +204,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         },
         "onwardGiftReceivedAsASettler": {
           "type": "number",
@@ -212,7 +212,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         }
       }
     },
@@ -226,7 +226,7 @@
           "example": "1999.99",
           "multipleOf": 0.01,
           "minimum": 0,
-          "maximum:": 99999999999.99
+          "maximum": 99999999999.99
         }
       },
       "required": [
