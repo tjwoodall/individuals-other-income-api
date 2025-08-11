@@ -132,7 +132,6 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
     MockedSharedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
   }
 
-
   protected trait HipTest extends ConnectorTest {
     private val clientId     = "clientId"
     private val clientSecret = "clientSecret"

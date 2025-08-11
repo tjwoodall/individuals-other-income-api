@@ -22,7 +22,10 @@ import shared.routing._
 
 import javax.inject.{Inject, Singleton}
 
-@Singleton case class OtherIncomeVersionRoutingMap @Inject() (appConfig: SharedAppConfig, defaultRouter: Router, v1Router: v1.Routes, v2Router: v2.Routes)
+@Singleton case class OtherIncomeVersionRoutingMap @Inject() (appConfig: SharedAppConfig,
+                                                              defaultRouter: Router,
+                                                              v1Router: v1.Routes,
+                                                              v2Router: v2.Routes)
     extends VersionRoutingMap {
 
   /** Routes corresponding to available versions.

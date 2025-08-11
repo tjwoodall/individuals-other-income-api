@@ -51,6 +51,6 @@ object CreateAmendOtherRequestBody extends JsonUtils {
       (JsPath \ "overseasIncomeAndGains").writeNullable[OverseasIncomeAndGains] and
       (JsPath \ "chargeableForeignBenefitsAndGifts").writeNullable[ChargeableForeignBenefitsAndGifts] and
       (JsPath \ "omittedForeignIncome").writeNullable[OmittedForeignIncome]
-  )(unlift(CreateAmendOtherRequestBody.unapply))
+  )(w => Tuple.fromProductTyped(w))
 
 }
