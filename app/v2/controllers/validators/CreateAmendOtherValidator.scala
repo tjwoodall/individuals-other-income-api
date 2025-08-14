@@ -41,6 +41,6 @@ class CreateAmendOtherValidator(nino: String, taxYear: String, body: JsValue) ex
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(CreateAmendOtherRequest) andThen CreateAmendOtherRulesValidator.validateBusinessRules
+    ).mapN(CreateAmendOtherRequest.apply) andThen CreateAmendOtherRulesValidator.validateBusinessRules
 
 }

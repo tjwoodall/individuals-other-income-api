@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class CreateAmendOtherConnectorSpec extends ConnectorSpec {
 
-  trait Test { _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val taxYear: String
 

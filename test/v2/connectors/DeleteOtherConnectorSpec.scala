@@ -16,7 +16,9 @@
 
 package v2.connectors
 
+import shared.config.MockSharedAppConfig
 import shared.connectors.ConnectorSpec
+import shared.mocks.MockHttpClient
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
@@ -54,8 +56,7 @@ class DeleteOtherConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest with MockSharedAppConfig with MockHttpClient {
 
     def taxYear: TaxYear
 

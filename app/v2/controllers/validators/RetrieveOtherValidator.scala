@@ -31,6 +31,6 @@ class RetrieveOtherValidator(nino: String, taxYear: String) extends Validator[Re
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(RetrieveOtherRequest)
+    ).mapN(RetrieveOtherRequest.apply)
 
 }

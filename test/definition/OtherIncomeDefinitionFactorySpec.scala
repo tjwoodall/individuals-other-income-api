@@ -24,28 +24,27 @@ import shared.definition.{APIDefinition, APIVersion, Definition}
 import shared.routing.{Version1, Version2}
 import shared.utils.UnitSpec
 
-class OtherIncomeDefinitionFactorySpec extends UnitSpec {
-
-  class Test extends MockSharedAppConfig {
-    val apiDefinitionFactory = new OtherIncomeDefinitionFactory(mockSharedAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "individuals/person"
-  }
+class OtherIncomeDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
 
   "definition" when {
     "called" should {
-      "return a valid Definition case class" in new Test {
+      "return a valid Definition case class" in {
+        MockedSharedAppConfig.apiGatewayContext returns "individuals/other-income"
+
         List(Version1, Version2).foreach { version =>
           MockedSharedAppConfig.apiStatus(version) returns "BETA"
           MockedSharedAppConfig.endpointsEnabled(version) returns true
           MockedSharedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
         }
 
+        val apiDefinitionFactory: OtherIncomeDefinitionFactory = new OtherIncomeDefinitionFactory(mockSharedAppConfig)
+
         apiDefinitionFactory.definition shouldBe
           Definition(
             api = APIDefinition(
               name = "Individuals Other Income (MTD)",
               description = "An API for providing individual other income data",
-              context = "individuals/person",
+              context = "individuals/other-income",
               categories = List("INCOME_TAX_MTD"),
               versions = List(
                 APIVersion(

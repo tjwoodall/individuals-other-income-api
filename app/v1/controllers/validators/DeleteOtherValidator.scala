@@ -31,6 +31,6 @@ class DeleteOtherValidator(nino: String, taxYear: String) extends Validator[Dele
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(DeleteOtherRequest)
+    ).mapN(DeleteOtherRequest.apply)
 
 }

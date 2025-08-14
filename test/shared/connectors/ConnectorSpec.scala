@@ -52,7 +52,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
   protected trait ConnectorTest extends MockHttpClient with MockSharedAppConfig {
     protected val baseUrl: String = "http://test-BaseUrl"
 
-    protected val requiredHeaders: Seq[(String, String)]
+    protected lazy val requiredHeaders: Seq[(String, String)]
 
     protected val allowedHeaders: Seq[String] = List("Gov-Test-Scenario")
 

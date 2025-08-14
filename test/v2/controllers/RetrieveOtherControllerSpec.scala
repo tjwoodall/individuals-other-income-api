@@ -150,7 +150,7 @@ class RetrieveOtherControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherController(
+    val controller: RetrieveOtherController = new RetrieveOtherController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherValidatorFactory,
@@ -166,7 +166,6 @@ class RetrieveOtherControllerSpec
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.retrieveOther(validNino, taxYear)(fakeGetRequest)
-
   }
 
 }

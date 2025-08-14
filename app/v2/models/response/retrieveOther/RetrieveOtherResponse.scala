@@ -44,7 +44,7 @@ object RetrieveOtherResponse extends JsonUtils {
           case chargeableForeignBenefitsAndGifts       => Some(chargeableForeignBenefitsAndGifts)
         }) and
       (JsPath \ "omittedForeignIncome").readNullable[OmittedForeignIncome]
-  )(RetrieveOtherResponse.apply _)
+  )(RetrieveOtherResponse.apply)
 
   implicit val writes: OWrites[RetrieveOtherResponse] = Json.writes[RetrieveOtherResponse]
 
