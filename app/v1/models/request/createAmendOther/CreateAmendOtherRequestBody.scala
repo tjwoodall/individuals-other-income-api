@@ -42,7 +42,7 @@ object CreateAmendOtherRequestBody extends JsonUtils {
           case chargeableForeignBenefitsAndGifts       => Some(chargeableForeignBenefitsAndGifts)
         }) and
       (JsPath \ "omittedForeignIncome").readNullable[OmittedForeignIncome]
-  )(CreateAmendOtherRequestBody.apply _)
+  )(CreateAmendOtherRequestBody.apply)
 
   implicit val writes: OWrites[CreateAmendOtherRequestBody] = (
     (JsPath \ "postCessationReceipts").writeNullable[Seq[PostCessationReceiptsItem]] and
@@ -51,6 +51,6 @@ object CreateAmendOtherRequestBody extends JsonUtils {
       (JsPath \ "overseasIncomeAndGains").writeNullable[OverseasIncomeAndGains] and
       (JsPath \ "chargeableForeignBenefitsAndGifts").writeNullable[ChargeableForeignBenefitsAndGifts] and
       (JsPath \ "omittedForeignIncome").writeNullable[OmittedForeignIncome]
-  )(unlift(CreateAmendOtherRequestBody.unapply))
+  )(w => Tuple.fromProductTyped(w))
 
 }

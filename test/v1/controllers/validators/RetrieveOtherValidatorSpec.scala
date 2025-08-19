@@ -26,10 +26,10 @@ import v1.models.request.retrieveOther.RetrieveOtherRequest
 class RetrieveOtherValidatorSpec extends UnitSpec with JsonErrorValidators with MockSharedAppConfig {
 
   private implicit val correlationId: String = "correlationId"
-  private val validNino = "AA123456A"
-  private val validTaxYear = "2019-20"
+  private val validNino                      = "AA123456A"
+  private val validTaxYear                   = "2019-20"
 
-  private val parsedNino = Nino(validNino)
+  private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   class Test extends MockSharedAppConfig {

@@ -16,7 +16,9 @@
 
 package v1.connectors
 
+import shared.config.MockSharedAppConfig
 import shared.connectors.ConnectorSpec
+import shared.mocks.MockHttpClient
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
@@ -24,7 +26,7 @@ import v1.models.request.deleteOther.DeleteOtherRequest
 
 import scala.concurrent.Future
 
-class DeleteOtherConnectorSpec extends ConnectorSpec {
+class DeleteOtherConnectorSpec extends ConnectorSpec with MockSharedAppConfig with MockHttpClient {
 
   "DeleteOtherConnector" should {
     "return the expected response for a non-TYS request" when {
@@ -54,8 +56,7 @@ class DeleteOtherConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest with MockSharedAppConfig with MockHttpClient {
 
     def taxYear: TaxYear
 

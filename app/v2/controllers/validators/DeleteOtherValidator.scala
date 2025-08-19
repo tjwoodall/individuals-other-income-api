@@ -24,7 +24,6 @@ import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v2.models.request.deleteOther.DeleteOtherRequest
 
-
 class DeleteOtherValidator(nino: String, taxYear: String) extends Validator[DeleteOtherRequest] {
   private val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromMtd("2019-20"))
 
@@ -32,6 +31,6 @@ class DeleteOtherValidator(nino: String, taxYear: String) extends Validator[Dele
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(DeleteOtherRequest)
+    ).mapN(DeleteOtherRequest.apply)
 
 }

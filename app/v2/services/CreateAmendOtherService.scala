@@ -18,7 +18,6 @@ package v2.services
 
 import cats.implicits._
 import common.{RuleOutsideAmendmentWindowError, RuleUnalignedCessationTaxYear}
-import shared.config.SharedAppConfig
 import shared.controllers.RequestContext
 import shared.models.errors._
 import shared.services.{BaseService, ServiceOutcome}
@@ -29,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector, appConfig: SharedAppConfig) extends BaseService {
+class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector) extends BaseService {
 
   def createAmend(request: CreateAmendOtherRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
@@ -48,10 +47,9 @@ class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector, a
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID"       -> InternalError,
-      "OUTSIDE_AMENDMENT_WINDOW"     -> RuleOutsideAmendmentWindowError,
-      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
-
+      "INVALID_CORRELATION_ID"   -> InternalError,
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError,
+      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError
     )
 
     errors ++ extraTysErrors

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package common
+package v1.models.request.createAmendOther
 
-import play.api.http.Status._
-import shared.models.errors.MtdError
+import play.api.libs.json.*
+import shared.utils.UnitSpec
 
-object RuleUnalignedCessationTaxYear
-    extends MtdError("RULE_UNALIGNED_CESSATION_TAX_YEAR", "The tax year provided must be the same as the tax year of income to be taxed", BAD_REQUEST)
+class PostCessationReceiptsItemSpec extends UnitSpec {
 
-object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
+  "PostCessationReceiptsItem" should {
+    "error when JSON is invalid" in {
+      Json
+        .parse("""{ 
+          |"amount": "notANumber", 
+          |"taxYearIncomeToBeTaxed" : "2014" 
+        }""".stripMargin)
+        .validate[PostCessationReceiptsItem] shouldBe a[JsError]
+    }
+  }
+
+}

@@ -21,13 +21,13 @@ import play.api.mvc.Result
 import shared.config.MockSharedAppConfig
 import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import shared.models.domain.{TaxYear, Timestamp}
-import shared.models.errors._
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import v1.controllers.validators.MockRetrieveOtherValidatorFactory
 import v1.fixtures.RetrieveOtherControllerFixture.fullRetrieveOtherResponse
 import v1.mocks.services.MockRetrieveOtherService
 import v1.models.request.retrieveOther.RetrieveOtherRequest
-import v1.models.response.retrieveOther._
+import v1.models.response.retrieveOther.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -150,7 +150,7 @@ class RetrieveOtherControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherController(
+    val controller: RetrieveOtherController = new RetrieveOtherController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherValidatorFactory,
@@ -166,7 +166,6 @@ class RetrieveOtherControllerSpec
     MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.retrieveOther(validNino, taxYear)(fakeGetRequest)
-
   }
 
 }

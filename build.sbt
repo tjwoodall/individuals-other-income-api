@@ -1,5 +1,12 @@
-import sbt._
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
+import uk.gov.hmrc.DefaultBuildSettings
+
+ThisBuild / scalaVersion := "3.5.2"
+ThisBuild / majorVersion := 0
+ThisBuild / scalacOptions ++= Seq(
+  "-Werror",
+  "-Wconf:msg=Flag.*repeatedly:s"
+)
+ThisBuild / scalafmtOnCompile := true
 
 val appName = "individuals-other-income-api"
 
@@ -10,15 +17,9 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
-    retrieveManaged                 := true,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalaVersion                    := "2.13.16",
     scalacOptions ++= List(
-      "-language:higherKinds",
-      "-Xlint:-byname-implicit",
-      "-Xfatal-warnings",
-      "-Wconf:src=routes/.*:silent",
-      "-feature"
+      "-feature",
+      "-Wconf:src=routes/.*:s"
     )
   )
   .settings(
@@ -26,7 +27,6 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(majorVersion := 0)
   .settings(CodeCoverageSettings.settings *)
-  .settings(defaultSettings() *)
   .configs(ItTest)
   .settings(
     ItTest / fork                       := true,
@@ -35,7 +35,6 @@ lazy val microservice = Project(appName, file("."))
     Runtime / unmanagedClasspath += baseDirectory.value / "resources",
     ItTest / javaOptions += "-Dlogger.resource=logback-test.xml",
     ItTest / parallelExecution := false,
-    addTestReportOption(ItTest, "int-test-reports")
   )
   .settings(PlayKeys.playDefaultPort := 7761)
 
