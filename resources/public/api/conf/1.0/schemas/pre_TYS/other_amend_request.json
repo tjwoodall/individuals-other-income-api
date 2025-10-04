@@ -9,6 +9,7 @@
     "overseasIncomeAndGains": {"$ref": "../other_definitions.json#/definitions/overseasIncomeAndGains"},
     "chargeableForeignBenefitsAndGifts": {"$ref": "../other_definitions.json#/definitions/chargeableForeignBenefitsAndGifts"},
     "omittedForeignIncome": {"$ref": "../other_definitions.json#/definitions/omittedForeignIncome"}
-  }
+  },
+  "additionalProperties": false
 }
 
