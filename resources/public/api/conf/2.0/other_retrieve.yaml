@@ -36,7 +36,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/pre_TYS/other_retrieve_response.json'
             - $ref: './schemas/2023_24/other_retrieve_response.json'
         examples:
