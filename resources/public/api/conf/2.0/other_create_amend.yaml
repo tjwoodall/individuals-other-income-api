@@ -32,7 +32,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/pre_TYS/other_amend_request.json'
           - $ref: './schemas/2023_24/other_amend_request.json'
       examples:
