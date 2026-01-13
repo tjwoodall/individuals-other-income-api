@@ -1,0 +1,1037 @@
+openapi: 3.0.3
+info:
+  version: '2.0'
+  title: Individuals Other Income (MTD)
+  description: |
+    The following endpoints are stateful in the Sandbox:
+    * Retrieve Other Income
+    * Create and Amend Other Income
+    * Delete Other Income
+
+    # Send fraud prevention data
+    HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
+
+    <div class="govuk-warning-text warning-icon-fix">
+      <span class="govuk-warning-text__icon warning-icon-ui-fix" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        You are required by law to submit header data for this API. This includes all associated APIs and endpoints.
+      </strong>
+    </div>
+
+    [Check the data you need to send](/guides/fraud-prevention/). You can also use the [Test API](/api-documentation/docs/api/service/txm-fph-validator-api/1.0) during initial development and as part of your quality assurance checks.
+
+    # Mapping APIs to Self Assessment tax return forms
+    Some parameters in this API map to box numbers in one or more Self Assessment tax return forms. To learn more and to download this mapping information as a CSV file, go to [income-tax-mtd-changelog/mapping](https://github.com/hmrc/income-tax-mtd-changelog?tab=readme-ov-file#mapping-apis-to-self-assessment-tax-return-forms) on GitHub.
+
+    # Changelog
+    You can find the changelog in the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/#readme) on GitHub.
+
+    # Support
+
+    * Direct reports of bugs or errors in Production or Sandbox code, or queries about HMRC business functionality (such as how a specific field is used by HMRC or why it is needed) to the [Software Development Support Team (SDST)](https://developer.service.hmrc.gov.uk/developer/support).
+    * Send queries or feedback related to the design of the APIs (including recommended changes) using the [income-tax-mtd-changelog](https://github.com/hmrc/income-tax-mtd-changelog/issues) GitHub page.
+    * <a href="/contact/report-technical-problem?newTab=true&service=api-documentation-frontend" target="_blank">Is this page not working properly? (opens in new tab)</a>
+servers:
+  - url: https://test-api.service.hmrc.gov.uk
+    description: Sandbox
+  - url: https://api.service.hmrc.gov.uk
+    description: Production
+paths:
+  /individuals/other-income/{nino}/{taxYear}:
+    get:
+      summary: Retrieve Other Income
+      security:
+        - User-Restricted:
+            - read:self-assessment
+      description: |
+        This endpoint enables you to retrieve details of other income:
+        business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income. 
+        A National Insurance number and tax year must be provided.
+
+        ###  Test data
+        Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+
+        | Header Value (Gov-Test-Scenario) | Scenario                                                                                                                        |
+        | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+        | N/A - DEFAULT                    | Simulates success response.                                                                                                     |
+        | NOT FOUND                        | Simulates the scenario where no data is found.                                                                                  |
+        | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request could not be processed.                                                                |
+        | DYNAMIC                          | The following response values will change to correspond to the values submitted in the request:<br> • taxYear<br> • submittedOn |
+        | STATEFUL                         | Performs a stateful retrieve.                                                                                                   |
+      parameters:
+        - name: nino
+          in: path
+          description: |
+            National Insurance number, in the format `AA999999A`
+          schema: &ref_10
+            type: string
+            example: TC663795B
+          required: true
+        - name: taxYear
+          in: path
+          description: |
+            The tax year the data applies to, for example, 2021-22. 
+            The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.
+            (The minimum tax year in Sandbox is 2019-20.)
+          schema: &ref_11
+            type: string
+            example: 2021-22
+          required: true
+        - name: Accept
+          in: header
+          description: |
+            Specifies the response format and the version of the API to be used.
+          schema: &ref_12
+            type: string
+            enum:
+              - application/vnd.hmrc.2.0+json
+          required: true
+        - name: Authorization
+          in: header
+          description: |
+            An OAuth 2.0 Bearer Token with the *read:self-assessment* scope.
+          schema:
+            type: string
+            example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+          required: true
+        - name: Gov-Test-Scenario
+          in: header
+          description: |
+            Only in sandbox environment. See Test Data table for all header values.
+          schema: &ref_13
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: &ref_7
+                type: string
+                example: c75f40a6-a3df-4429-a697-471eeec46435
+              required: true
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $schema: http://json-schema.org/draft-04/schema#
+                    title: Before TY 2023-24
+                    description: Retrieve Other Income Request
+                    type: object
+                    properties:
+                      submittedOn:
+                        type: string
+                        description: The date the other income was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ
+                        example: '2021-04-06T09:37:17Z'
+                      businessReceipts:
+                        type: array
+                        items: &ref_0
+                          type: object
+                          description: Financial details about business receipts.
+                          properties:
+                            grossAmount:
+                              type: number
+                              description: The amount of post-cessation or other business receipts (business receipts taxed as income of an earlier year). The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            taxYear:
+                              type: string
+                              description: The tax year where business receipts needed taxing as income. Date in the format YYYY-YY.
+                              example: 2021-22
+                          required:
+                            - grossAmount
+                            - taxYear
+                      allOtherIncomeReceivedWhilstAbroad:
+                        type: array
+                        items: &ref_1
+                          type: object
+                          description: Financial details about all other income received whilst abroad income.
+                          properties:
+                            countryCode:
+                              type: string
+                              description: A three-letter code that represents a country name. The value must in a ISO 3166-1 Alpha-3 format.
+                              example: FRA
+                            amountBeforeTax:
+                              type: number
+                              description: The total amount before any tax taken off other income. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            taxTakenOff:
+                              type: number
+                              description: The amount of tax taken off other income. The value must be between 1 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            specialWithholdingTax:
+                              type: number
+                              description: Special Withholding Tax (SWT) amount taken off this payment. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            foreignTaxCreditRelief:
+                              type: boolean
+                              description: Indicates whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.
+                              example: 'true'
+                            taxableAmount:
+                              type: number
+                              description: The amount of tax to be paid. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            residentialFinancialCostAmount:
+                              type: number
+                              description: The amount of residential property income or restricted finance costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            broughtFwdResidentialFinancialCostAmount:
+                              type: number
+                              description: The unused residential finance costs brought forward. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                          required:
+                            - countryCode
+                            - taxableAmount
+                      overseasIncomeAndGains:
+                        type: object
+                        description: The container that holds the key value for overseas income and gains.
+                        properties: &ref_2
+                          gainAmount:
+                            type: number
+                            description: The gains amount on disposals of holdings in offshore funds. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                        required: &ref_3
+                          - gainAmount
+                      chargeableForeignBenefitsAndGifts:
+                        type: object
+                        description: The container that holds the key value for chargeable foreign benefits and gifts.
+                        properties: &ref_4
+                          transactionBenefit:
+                            type: number
+                            description: Benefit received on an overseas transaction. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                          protectedForeignIncomeSourceBenefit:
+                            type: number
+                            description: Benefit received on a protected foreign income source. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                          protectedForeignIncomeOnwardGift:
+                            type: number
+                            description: Protected foreign income gifted. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                          benefitReceivedAsASettler:
+                            type: number
+                            description: Benefit received as a settler. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                          onwardGiftReceivedAsASettler:
+                            type: number
+                            description: Gift received as a settler. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                      omittedForeignIncome:
+                        type: object
+                        description: The container that holds the key value for omitted foreign income.
+                        properties: &ref_5
+                          amount:
+                            type: number
+                            description: The amount of omitted foreign income. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                            example: '1999.99'
+                            multipleOf: 0.01
+                            minimum: 0
+                            'maximum:': 99999999999.99
+                        required: &ref_6
+                          - amount
+                    required:
+                      - submittedOn
+                  - $schema: http://json-schema.org/draft-04/schema#
+                    title: TY 2023-24 or later
+                    description: Retrieve Other Income Request
+                    type: object
+                    properties:
+                      submittedOn:
+                        type: string
+                        description: The date the other income was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ
+                        example: '2021-04-06T09:37:17Z'
+                      postCessationReceipts:
+                        type: array
+                        items: &ref_14
+                          type: object
+                          description: Details of sum received related to the carrying on of the trade after a business ceases to carry on.
+                          properties:
+                            customerReference:
+                              type: String
+                              description: A reference the user supplies to identify the other income. Must be between 1 and 90 characters in length.
+                              example: String
+                            businessName:
+                              type: string
+                              description: The name of the business.
+                              example: Business Name
+                            dateBusinessCeased:
+                              type: string
+                              description: The business cessation date. Date in the format YYYY-MM-DD
+                              example: '2023-06-16'
+                            businessDescription:
+                              type: string
+                              description: A description of the business.
+                              example: Description
+                            incomeSource:
+                              type: string
+                              description: The income source
+                              example: string
+                            amount:
+                              type: number
+                              description: The amount of income. Monetary value (to 2 decimal places), between 0 and 99999999999.99
+                              example: '1999.99'
+                              multipleOf: 0.01
+                              minimum: 0
+                              'maximum:': 99999999999.99
+                            taxYearIncomeToBeTaxed:
+                              type: string
+                              description: The tax year for income to be taxed. Date in the format YYYY-YY, for example 2019-20 for the 19/20 tax year.
+                              example: 2021-22
+                          required:
+                            - amount
+                            - taxYearIncomeToBeTaxed
+                      businessReceipts:
+                        type: array
+                        items: *ref_0
+                      allOtherIncomeReceivedWhilstAbroad:
+                        type: array
+                        items: *ref_1
+                      overseasIncomeAndGains:
+                        type: object
+                        description: The container that holds the key value for overseas income and gains.
+                        properties: *ref_2
+                        required: *ref_3
+                      chargeableForeignBenefitsAndGifts:
+                        type: object
+                        description: The container that holds the key value for chargeable foreign benefits and gifts.
+                        properties: *ref_4
+                      omittedForeignIncome:
+                        type: object
+                        description: The container that holds the key value for omitted foreign income.
+                        properties: *ref_5
+                        required: *ref_6
+                    required:
+                      - submittedOn
+              examples:
+                Before TY 2023-24:
+                  description: Full Other Income Amendment
+                  value:
+                    submittedOn: '2021-04-06T09:37:17.000Z'
+                    businessReceipts:
+                      - grossAmount: 1999.99
+                        taxYear: 2021-22
+                    allOtherIncomeReceivedWhilstAbroad:
+                      - countryCode: FRA
+                        amountBeforeTax: 1999.99
+                        taxTakenOff: 1999.99
+                        specialWithholdingTax: 1999.99
+                        foreignTaxCreditRelief: true
+                        taxableAmount: 1999.99
+                        residentialFinancialCostAmount: 1999.99
+                        broughtFwdResidentialFinancialCostAmount: 1999.99
+                    overseasIncomeAndGains:
+                      gainAmount: 1999.99
+                    chargeableForeignBenefitsAndGifts:
+                      transactionBenefit: 1999.99
+                      protectedForeignIncomeSourceBenefit: 1999.99
+                      protectedForeignIncomeOnwardGift: 1999.99
+                      benefitReceivedAsASettler: 1999.99
+                      onwardGiftReceivedAsASettler: 1999.99
+                    omittedForeignIncome:
+                      amount: 1999.99
+                TY 2023-24 or later:
+                  description: Full Other Income Amendment
+                  value:
+                    submittedOn: '2021-04-06T09:37:17.000Z'
+                    postCessationReceipts:
+                      - customerReference: String
+                        businessName: Business Name
+                        dateBusinessCeased: '2023-05-30'
+                        businessDescription: Description
+                        incomeSource: string
+                        amount: 1999.99
+                        taxYearIncomeToBeTaxed: 2021-22
+                    businessReceipts:
+                      - grossAmount: 1999.99
+                        taxYear: 2021-22
+                    allOtherIncomeReceivedWhilstAbroad:
+                      - countryCode: FRA
+                        amountBeforeTax: 1999.99
+                        taxTakenOff: 1999.99
+                        specialWithholdingTax: 1999.99
+                        foreignTaxCreditRelief: true
+                        taxableAmount: 1999.99
+                        residentialFinancialCostAmount: 1999.99
+                        broughtFwdResidentialFinancialCostAmount: 1999.99
+                    overseasIncomeAndGains:
+                      gainAmount: 1999.99
+                    chargeableForeignBenefitsAndGifts:
+                      transactionBenefit: 1999.99
+                      protectedForeignIncomeSourceBenefit: 1999.99
+                      protectedForeignIncomeOnwardGift: 1999.99
+                      benefitReceivedAsASettler: 1999.99
+                      onwardGiftReceivedAsASettler: 1999.99
+                    omittedForeignIncome:
+                      amount: 1999.99
+        '400':
+          description: Bad request
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: &ref_8
+                  code:
+                    description: The error code
+                    type: string
+                  message:
+                    description: The error message
+                    type: string
+                required: &ref_9
+                  - code
+              examples:
+                FORMAT_NINO:
+                  description: The format of the supplied NINO field is not valid.
+                  value: &ref_15
+                    code: FORMAT_NINO
+                    message: The NINO format is invalid
+                FORMAT_TAX_YEAR:
+                  description: The format of the supplied tax year field is not valid.
+                  value: &ref_16
+                    code: FORMAT_TAX_YEAR
+                    message: The taxYear format is invalid
+                RULE_TAX_YEAR_NOT_SUPPORTED:
+                  description: |
+                    The specified tax year is not supported.
+                    Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+                  value: &ref_17
+                    code: RULE_TAX_YEAR_NOT_SUPPORTED
+                    message: The tax year specified does not lie within the supported range
+                RULE_TAX_YEAR_RANGE_INVALID:
+                  description: Tax year range invalid. A tax year range of one year is required.
+                  value: &ref_18
+                    code: RULE_TAX_YEAR_RANGE_INVALID
+                    message: A tax year range of one year is required
+                RULE_INCORRECT_GOV_TEST_SCENARIO:
+                  description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
+                  value: &ref_19
+                    code: RULE_INCORRECT_GOV_TEST_SCENARIO
+                    message: The supplied Gov-Test-Scenario is not valid
+        '403':
+          description: Forbidden
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                CLIENT_OR_AGENT_NOT_AUTHORISED:
+                  description: |
+                    The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
+                    the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
+                  value: &ref_20
+                    code: CLIENT_OR_AGENT_NOT_AUTHORISED
+                    message: The client or agent is not authorised
+        '404':
+          description: Not Found
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                MATCHING_RESOURCE_NOT_FOUND:
+                  description: The supplied income source could not be found.
+                  value: &ref_24
+                    code: MATCHING_RESOURCE_NOT_FOUND
+                    message: Matching resource not found
+        '422':
+          description: Unprocessable Entity
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                RULE_REQUEST_CANNOT_BE_FULFILLED:
+                  description: The request cannot be fulfilled. More specific information is provided in the error message.
+                  value: &ref_21
+                    code: RULE_REQUEST_CANNOT_BE_FULFILLED
+                    message: Custom (will vary in production depending on the actual error)
+    put:
+      summary: Create and Amend Other Income
+      security:
+        - User-Restricted:
+            - write:self-assessment
+      description: |
+        This endpoint enables you to create and amend other income:
+        business receipts, overseas income and gains, chargeable foreign benefits and gifts, omitted foreign income, and all other income received whilst abroad.  
+        A National Insurance number and tax year must be provided.
+
+        ###  Test data
+        Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+
+
+        | Header Value (Gov-Test-Scenario) | Scenario                                                                                                  |
+        | -------------------------------- | --------------------------------------------------------------------------------------------------------- |
+        | N/A - DEFAULT                    | Simulates success response.                                                                               |
+        | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.           |
+        | UNALIGNED_CESSATION_TAX_YEAR     | Simulates the scenario where the tax year provided is not the same as the tax year of income to be taxed. |
+        | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request could not be processed.                                          |
+        | STATEFUL                         | Performs a stateful create or update.                                                                     |
+      parameters:
+        - name: nino
+          in: path
+          description: |
+            National Insurance number, in the format `AA999999A`
+          schema: *ref_10
+          required: true
+        - name: taxYear
+          in: path
+          description: |
+            The tax year the data applies to, for example, 2021-22. 
+            The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.
+            (The minimum tax year in Sandbox is 2019-20.)
+          schema: *ref_11
+          required: true
+        - name: Accept
+          in: header
+          description: |
+            Specifies the response format and the version of the API to be used.
+          schema: *ref_12
+          required: true
+        - name: Content-Type
+          in: header
+          description: |
+            Specifies the format of the request body, which must be JSON.
+          schema:
+            type: string
+            enum:
+              - application/json
+          required: true
+        - name: Authorization
+          in: header
+          description: |
+            An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
+          schema: &ref_22
+            type: string
+            example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+          required: true
+        - name: Gov-Test-Scenario
+          in: header
+          description: |
+            Only in sandbox environment. See Test Data table for all header values.
+          schema: *ref_13
+          required: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $schema: http://json-schema.org/draft-04/schema#
+                  title: Before TY 2023-24
+                  description: Create And Amend Other Income Request
+                  type: object
+                  properties:
+                    businessReceipts:
+                      type: array
+                      items: *ref_0
+                    allOtherIncomeReceivedWhilstAbroad:
+                      type: array
+                      items: *ref_1
+                    overseasIncomeAndGains:
+                      type: object
+                      description: The container that holds the key value for overseas income and gains.
+                      properties: *ref_2
+                      required: *ref_3
+                    chargeableForeignBenefitsAndGifts:
+                      type: object
+                      description: The container that holds the key value for chargeable foreign benefits and gifts.
+                      properties: *ref_4
+                    omittedForeignIncome:
+                      type: object
+                      description: The container that holds the key value for omitted foreign income.
+                      properties: *ref_5
+                      required: *ref_6
+                - $schema: http://json-schema.org/draft-04/schema#
+                  title: TY 2023-24 or later
+                  description: Create And Amend Other Income Request
+                  type: object
+                  properties:
+                    postCessationReceipts:
+                      type: array
+                      items: *ref_14
+                    businessReceipts:
+                      type: array
+                      items: *ref_0
+                    allOtherIncomeReceivedWhilstAbroad:
+                      type: array
+                      items: *ref_1
+                    overseasIncomeAndGains:
+                      type: object
+                      description: The container that holds the key value for overseas income and gains.
+                      properties: *ref_2
+                      required: *ref_3
+                    chargeableForeignBenefitsAndGifts:
+                      type: object
+                      description: The container that holds the key value for chargeable foreign benefits and gifts.
+                      properties: *ref_4
+                    omittedForeignIncome:
+                      type: object
+                      description: The container that holds the key value for omitted foreign income.
+                      properties: *ref_5
+                      required: *ref_6
+            examples:
+              Before TY 2023-24:
+                description: Full Other Income Amendment
+                value:
+                  businessReceipts:
+                    - grossAmount: 1999.99
+                      taxYear: 2021-22
+                  allOtherIncomeReceivedWhilstAbroad:
+                    - countryCode: FRA
+                      amountBeforeTax: 1999.99
+                      taxTakenOff: 1999.99
+                      specialWithholdingTax: 1999.99
+                      foreignTaxCreditRelief: true
+                      taxableAmount: 1999.99
+                      residentialFinancialCostAmount: 1999.99
+                      broughtFwdResidentialFinancialCostAmount: 1999.99
+                  overseasIncomeAndGains:
+                    gainAmount: 1999.99
+                  chargeableForeignBenefitsAndGifts:
+                    transactionBenefit: 1999.99
+                    protectedForeignIncomeSourceBenefit: 1999.99
+                    protectedForeignIncomeOnwardGift: 1999.99
+                    benefitReceivedAsASettler: 1999.99
+                    onwardGiftReceivedAsASettler: 1999.99
+                  omittedForeignIncome:
+                    amount: 1999.99
+              TY 2023-24 or later:
+                description: Full Other Income Amendment
+                value:
+                  postCessationReceipts:
+                    - customerReference: String
+                      businessName: Business Name
+                      dateBusinessCeased: '2023-05-30'
+                      businessDescription: Description
+                      incomeSource: string
+                      amount: 1999.99
+                      taxYearIncomeToBeTaxed: 2021-22
+                  businessReceipts:
+                    - grossAmount: 1999.99
+                      taxYear: 2021-22
+                  allOtherIncomeReceivedWhilstAbroad:
+                    - countryCode: FRA
+                      amountBeforeTax: 1999.99
+                      taxTakenOff: 1999.99
+                      specialWithholdingTax: 1999.99
+                      foreignTaxCreditRelief: true
+                      taxableAmount: 1999.99
+                      residentialFinancialCostAmount: 1999.99
+                      broughtFwdResidentialFinancialCostAmount: 1999.99
+                  overseasIncomeAndGains:
+                    gainAmount: 1999.99
+                  chargeableForeignBenefitsAndGifts:
+                    transactionBenefit: 1999.99
+                    protectedForeignIncomeSourceBenefit: 1999.99
+                    protectedForeignIncomeOnwardGift: 1999.99
+                    benefitReceivedAsASettler: 1999.99
+                    onwardGiftReceivedAsASettler: 1999.99
+                  omittedForeignIncome:
+                    amount: 1999.99
+      responses:
+        '200':
+          description: Success
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+        '400':
+          description: Bad request
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                FORMAT_NINO:
+                  description: The format of the supplied NINO field is not valid.
+                  value: *ref_15
+                FORMAT_TAX_YEAR:
+                  description: The format of the supplied tax year field is not valid.
+                  value: *ref_16
+                RULE_TAX_YEAR_NOT_SUPPORTED:
+                  description: |
+                    The specified tax year is not supported.
+                    Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+                  value: *ref_17
+                RULE_TAX_YEAR_RANGE_INVALID:
+                  description: Tax year range invalid. A tax year range of one year is required.
+                  value: *ref_18
+                FORMAT_COUNTRY_CODE:
+                  description: The format of the supplied country code is not valid.
+                  value:
+                    code: FORMAT_COUNTRY_CODE
+                    message: The provided Country code is invalid
+                RULE_COUNTRY_CODE:
+                  description: Not a valid ISO 3166-1 alpha-3 country code.
+                  value:
+                    code: RULE_COUNTRY_CODE
+                    message: The country code is not a valid ISO 3166-1 alpha-3 country code
+                FORMAT_VALUE:
+                  description: One or more values have been added with the incorrect format.
+                  value:
+                    code: FORMAT_VALUE
+                    message: The value must be between 0.00 and 99999999999.99
+                FORMAT_DATE:
+                  description: The supplied date format is not valid.
+                  value:
+                    code: FORMAT_DATE
+                    message: The supplied date format is not valid
+                RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+                  description: An empty or non-matching body was submitted.
+                  value:
+                    code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
+                    message: An empty or non-matching body was submitted
+                RULE_UNALIGNED_CESSATION_TAX_YEAR:
+                  description: The tax year provided must be the same as the tax year of income to be taxed.
+                  value:
+                    code: RULE_UNALIGNED_CESSATION_TAX_YEAR
+                    message: The tax year provided must be the same as the tax year of income to be taxed
+                RULE_INCORRECT_GOV_TEST_SCENARIO:
+                  description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
+                  value: *ref_19
+                RULE_DATE_RANGE_INVALID:
+                  description: The date provide is outside of the range 1900-01-01 to 2100-01-01
+                  value:
+                    code: RULE_DATE_RANGE_INVALID
+                    message: The specified date range is invalid
+                RULE_OUTSIDE_AMENDMENT_WINDOW:
+                  description: The request cannot be completed as you are outside the amendment window.
+                  value: &ref_23
+                    code: RULE_OUTSIDE_AMENDMENT_WINDOW
+                    message: You are outside the amendment window
+        '403':
+          description: Forbidden
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                CLIENT_OR_AGENT_NOT_AUTHORISED:
+                  description: |
+                    The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
+                    the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
+                  value: *ref_20
+        '422':
+          description: Unprocessable Entity
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                RULE_REQUEST_CANNOT_BE_FULFILLED:
+                  description: The request cannot be fulfilled. More specific information is provided in the error message.
+                  value: *ref_21
+    delete:
+      summary: Delete Other Income
+      security:
+        - User-Restricted:
+            - write:self-assessment
+      description: |
+        This endpoint enables you to delete details of other income:
+        business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income.
+        A National Insurance number and tax year must be provided.
+
+        ### Test data
+        Scenario simulations using Gov-Test-Scenario headers is only available in the sandbox environment.</p>
+
+        | Header Value (Gov-Test-Scenario) | Scenario                                                                                        |
+        | -------------------------------- | ----------------------------------------------------------------------------------------------- |
+        | N/A - DEFAULT                    | Simulates success response.                                                                     |
+        | NOT FOUND                        | Simulates the scenario where no data is found.                                                  |
+        | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
+        | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request could not be processed.                                |
+        | STATEFUL                         | Performs a stateful delete.                                                                     |
+      parameters:
+        - name: nino
+          in: path
+          description: |
+            National Insurance number, in the format `AA999999A`
+          schema: *ref_10
+          required: true
+        - name: taxYear
+          in: path
+          description: |
+            The tax year the data applies to, for example, 2021-22. 
+            The start year and end year must not span two tax years. The minimum tax year is 2021-22. No gaps are allowed, for example, 2020-22 is not valid.
+            (The minimum tax year in Sandbox is 2019-20.)
+          schema: *ref_11
+          required: true
+        - name: Accept
+          in: header
+          description: |
+            Specifies the response format and the version of the API to be used.
+          schema: *ref_12
+          required: true
+        - name: Authorization
+          in: header
+          description: |
+            An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
+          schema: *ref_22
+          required: true
+        - name: Gov-Test-Scenario
+          in: header
+          description: |
+            Only in sandbox environment. See Test Data table for all header values.
+          schema: *ref_13
+          required: false
+      responses:
+        '204':
+          description: No Content
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+        '400':
+          description: Bad request
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                FORMAT_NINO:
+                  description: The format of the supplied NINO field is not valid.
+                  value: *ref_15
+                FORMAT_TAX_YEAR:
+                  description: The format of the supplied tax year field is not valid.
+                  value: *ref_16
+                RULE_TAX_YEAR_NOT_SUPPORTED:
+                  description: |
+                    The specified tax year is not supported.
+                    Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+                  value: *ref_17
+                RULE_TAX_YEAR_RANGE_INVALID:
+                  description: Tax year range invalid. A tax year range of one year is required.
+                  value: *ref_18
+                RULE_INCORRECT_GOV_TEST_SCENARIO:
+                  description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
+                  value: *ref_19
+                RULE_OUTSIDE_AMENDMENT_WINDOW:
+                  description: The request cannot be completed as you are outside the amendment window.
+                  value: *ref_23
+        '403':
+          description: Forbidden
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                CLIENT_OR_AGENT_NOT_AUTHORISED:
+                  description: |
+                    The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
+                    the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
+                  value: *ref_20
+        '404':
+          description: Not Found
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                MATCHING_RESOURCE_NOT_FOUND:
+                  description: The supplied income source could not be found.
+                  value: *ref_24
+        '422':
+          description: Unprocessable Entity
+          headers:
+            X-CorrelationId:
+              in: header
+              type: string
+              description: |
+                Unique ID for operation tracking
+                String, 36 characters.
+              schema: *ref_7
+              required: true
+          content:
+            application/json:
+              schema:
+                description: Error Response
+                type: object
+                properties: *ref_8
+                required: *ref_9
+              examples:
+                RULE_REQUEST_CANNOT_BE_FULFILLED:
+                  description: The request cannot be fulfilled. More specific information is provided in the error message.
+                  value: *ref_21
+components:
+  securitySchemes:
+    User-Restricted:
+      type: oauth2
+      description: HMRC supports OAuth 2.0 for authenticating [User-restricted](https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints) API requests
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            write:self-assessment: Grant write access
+            read:self-assessment: Grant read access
