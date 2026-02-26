@@ -18,12 +18,12 @@ package v2.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services._
+import shared.models.errors.*
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v2.fixtures.RetrieveOtherControllerFixture
 import v2.fixtures.RetrieveOtherControllerFixture.fullRetrieveOtherResponse
@@ -92,7 +92,7 @@ class RetrieveOtherControllerISpec extends IntegrationBaseSpec {
         ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError),
         ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError)
       )
-      input.foreach(args => (validationErrorTest _).tupled(args))
+      input.foreach(validationErrorTest.tupled)
     }
 
     "downstream service error" when {
@@ -135,7 +135,7 @@ class RetrieveOtherControllerISpec extends IntegrationBaseSpec {
         (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
+      (errors ++ extraTysErrors).foreach(serviceErrorTest.tupled)
     }
   }
 
