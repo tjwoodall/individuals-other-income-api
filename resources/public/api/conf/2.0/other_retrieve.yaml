@@ -42,12 +42,10 @@ responses:
         examples:
           Before TY 2023-24:
             description: Full Other Income Amendment
-            value:
-              $ref: './examples/otherIncome/pre_TYS/retrieve_response.json'
+            externalValue: './examples/otherIncome/pre_TYS/retrieve_response.json'
           TY 2023-24 or later:
             description: Full Other Income Amendment
-            value:
-              $ref: './examples/otherIncome/2023_24/retrieve_response.json'
+            externalValue: './examples/otherIncome/2023_24/retrieve_response.json'
 
   "400":
     description: Bad request
