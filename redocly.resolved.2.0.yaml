@@ -40,10 +40,10 @@ servers:
 paths:
   /individuals/other-income/{nino}/{taxYear}:
     get:
-      summary: Retrieve Other Income
       security:
         - User-Restricted:
             - read:self-assessment
+      summary: Retrieve Other Income
       description: |
         This endpoint enables you to retrieve details of other income:
         business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income. 
@@ -350,63 +350,11 @@ paths:
                 Before TY 2023-24:
                   description: Full Other Income Amendment
                   value:
-                    submittedOn: '2021-04-06T09:37:17.000Z'
-                    businessReceipts:
-                      - grossAmount: 1999.99
-                        taxYear: 2021-22
-                    allOtherIncomeReceivedWhilstAbroad:
-                      - countryCode: FRA
-                        amountBeforeTax: 1999.99
-                        taxTakenOff: 1999.99
-                        specialWithholdingTax: 1999.99
-                        foreignTaxCreditRelief: true
-                        taxableAmount: 1999.99
-                        residentialFinancialCostAmount: 1999.99
-                        broughtFwdResidentialFinancialCostAmount: 1999.99
-                    overseasIncomeAndGains:
-                      gainAmount: 1999.99
-                    chargeableForeignBenefitsAndGifts:
-                      transactionBenefit: 1999.99
-                      protectedForeignIncomeSourceBenefit: 1999.99
-                      protectedForeignIncomeOnwardGift: 1999.99
-                      benefitReceivedAsASettler: 1999.99
-                      onwardGiftReceivedAsASettler: 1999.99
-                    omittedForeignIncome:
-                      amount: 1999.99
+                    $ref: ./examples/otherIncome/pre_TYS/retrieve_response.json
                 TY 2023-24 or later:
                   description: Full Other Income Amendment
                   value:
-                    submittedOn: '2021-04-06T09:37:17.000Z'
-                    postCessationReceipts:
-                      - customerReference: String
-                        businessName: Business Name
-                        dateBusinessCeased: '2023-05-30'
-                        businessDescription: Description
-                        incomeSource: string
-                        amount: 1999.99
-                        taxYearIncomeToBeTaxed: 2021-22
-                    businessReceipts:
-                      - grossAmount: 1999.99
-                        taxYear: 2021-22
-                    allOtherIncomeReceivedWhilstAbroad:
-                      - countryCode: FRA
-                        amountBeforeTax: 1999.99
-                        taxTakenOff: 1999.99
-                        specialWithholdingTax: 1999.99
-                        foreignTaxCreditRelief: true
-                        taxableAmount: 1999.99
-                        residentialFinancialCostAmount: 1999.99
-                        broughtFwdResidentialFinancialCostAmount: 1999.99
-                    overseasIncomeAndGains:
-                      gainAmount: 1999.99
-                    chargeableForeignBenefitsAndGifts:
-                      transactionBenefit: 1999.99
-                      protectedForeignIncomeSourceBenefit: 1999.99
-                      protectedForeignIncomeOnwardGift: 1999.99
-                      benefitReceivedAsASettler: 1999.99
-                      onwardGiftReceivedAsASettler: 1999.99
-                    omittedForeignIncome:
-                      amount: 1999.99
+                    $ref: ./examples/otherIncome/2023_24/retrieve_response.json
         '400':
           description: Bad request
           headers:
@@ -535,10 +483,10 @@ paths:
                     code: RULE_REQUEST_CANNOT_BE_FULFILLED
                     message: Custom (will vary in production depending on the actual error)
     put:
-      summary: Create and Amend Other Income
       security:
         - User-Restricted:
             - write:self-assessment
+      summary: Create and Amend Other Income
       description: |
         This endpoint enables you to create and amend other income:
         business receipts, overseas income and gains, chargeable foreign benefits and gifts, omitted foreign income, and all other income received whilst abroad.  
@@ -661,61 +609,11 @@ paths:
               Before TY 2023-24:
                 description: Full Other Income Amendment
                 value:
-                  businessReceipts:
-                    - grossAmount: 1999.99
-                      taxYear: 2021-22
-                  allOtherIncomeReceivedWhilstAbroad:
-                    - countryCode: FRA
-                      amountBeforeTax: 1999.99
-                      taxTakenOff: 1999.99
-                      specialWithholdingTax: 1999.99
-                      foreignTaxCreditRelief: true
-                      taxableAmount: 1999.99
-                      residentialFinancialCostAmount: 1999.99
-                      broughtFwdResidentialFinancialCostAmount: 1999.99
-                  overseasIncomeAndGains:
-                    gainAmount: 1999.99
-                  chargeableForeignBenefitsAndGifts:
-                    transactionBenefit: 1999.99
-                    protectedForeignIncomeSourceBenefit: 1999.99
-                    protectedForeignIncomeOnwardGift: 1999.99
-                    benefitReceivedAsASettler: 1999.99
-                    onwardGiftReceivedAsASettler: 1999.99
-                  omittedForeignIncome:
-                    amount: 1999.99
+                  $ref: ./examples/otherIncome/pre_TYS/amend_request.json
               TY 2023-24 or later:
                 description: Full Other Income Amendment
                 value:
-                  postCessationReceipts:
-                    - customerReference: String
-                      businessName: Business Name
-                      dateBusinessCeased: '2023-05-30'
-                      businessDescription: Description
-                      incomeSource: string
-                      amount: 1999.99
-                      taxYearIncomeToBeTaxed: 2021-22
-                  businessReceipts:
-                    - grossAmount: 1999.99
-                      taxYear: 2021-22
-                  allOtherIncomeReceivedWhilstAbroad:
-                    - countryCode: FRA
-                      amountBeforeTax: 1999.99
-                      taxTakenOff: 1999.99
-                      specialWithholdingTax: 1999.99
-                      foreignTaxCreditRelief: true
-                      taxableAmount: 1999.99
-                      residentialFinancialCostAmount: 1999.99
-                      broughtFwdResidentialFinancialCostAmount: 1999.99
-                  overseasIncomeAndGains:
-                    gainAmount: 1999.99
-                  chargeableForeignBenefitsAndGifts:
-                    transactionBenefit: 1999.99
-                    protectedForeignIncomeSourceBenefit: 1999.99
-                    protectedForeignIncomeOnwardGift: 1999.99
-                    benefitReceivedAsASettler: 1999.99
-                    onwardGiftReceivedAsASettler: 1999.99
-                  omittedForeignIncome:
-                    amount: 1999.99
+                  $ref: ./examples/otherIncome/2023_24/amend_request.json
       responses:
         '200':
           description: Success
@@ -851,10 +749,10 @@ paths:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
                   value: *ref_21
     delete:
-      summary: Delete Other Income
       security:
         - User-Restricted:
             - write:self-assessment
+      summary: Delete Other Income
       description: |
         This endpoint enables you to delete details of other income:
         business receipts, all other income received whilst abroad, overseas income and gains, chargeable foreign benefits and gifts and omitted foreign income.
