@@ -33,17 +33,14 @@ servers:
 paths:
   /individuals/other-income/{nino}/{taxYear}:
     get:
-      summary: Retrieve Other Income
       security:
       - User-Restricted:
         - read:self-assessment
     put:
-      summary: Create and Amend Other Income
       security:
       - User-Restricted:
         - write:self-assessment
     delete:
-      summary: Delete Other Income
       security:
       - User-Restricted:
         - write:self-assessment
