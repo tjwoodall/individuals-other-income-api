@@ -138,6 +138,26 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
         validate(body = body(postCessationReceiptsItemJson.update("dateBusinessCeased", JsString("1899-01-01")))) shouldBe
           singleError(RuleDateRangeInvalidError.withPath("/postCessationReceipts/0/dateBusinessCeased"))
       }
+
+      "return CustomerReferenceFormatError when an invalid customer reference is supplied" in new SetupConfig {
+        validate(body = body(postCessationReceiptsItemJson.update("customerReference", JsString("x" * 99)))) shouldBe
+          singleError(CustomerReferenceFormatError.withPath("/postCessationReceipts/0/customerReference"))
+      }
+
+      "return BusinessNameFormatError when an invalid business name is supplied" in new SetupConfig {
+        validate(body = body(postCessationReceiptsItemJson.update("businessName", JsString("*" * 106)))) shouldBe
+          singleError(BusinessNameFormatError.withPath("/postCessationReceipts/0/businessName"))
+      }
+
+      "return BusinessDescriptionFormatError when an invalid business name is supplied" in new SetupConfig {
+        validate(body = body(postCessationReceiptsItemJson.update("businessDescription", JsString("*" * 36)))) shouldBe
+          singleError(BusinessDescriptionFormatError.withPath("/postCessationReceipts/0/businessDescription"))
+      }
+
+      "return BusinessDescriptionFormatError when an invalid income source is supplied" in new SetupConfig {
+        validate(body = body(postCessationReceiptsItemJson.update("incomeSource", JsString("*" * 106)))) shouldBe
+          singleError(IncomeSourceFormatError.withPath("/postCessationReceipts/0/incomeSource"))
+      }
     }
 
     "validating businessReceipts" should {
