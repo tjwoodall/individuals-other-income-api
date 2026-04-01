@@ -154,7 +154,7 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
           singleError(BusinessDescriptionFormatError.withPath("/postCessationReceipts/0/businessDescription"))
       }
 
-      "return BusinessDescriptionFormatError when an invalid income source is supplied" in new SetupConfig {
+      "return IncomeSourceFormatError when an invalid income source is supplied" in new SetupConfig {
         validate(body = body(postCessationReceiptsItemJson.update("incomeSource", JsString("*" * 106)))) shouldBe
           singleError(IncomeSourceFormatError.withPath("/postCessationReceipts/0/incomeSource"))
       }

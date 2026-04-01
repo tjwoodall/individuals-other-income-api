@@ -12,14 +12,16 @@
         "description": "Details of sum received related to the carrying on of the trade after a business ceases to carry on.",
         "properties": {
           "customerReference": {
-            "type": "String",
+            "type": "string",
             "description": "A reference the user supplies to identify the other income. Must be between 1 and 90 characters in length.",
-            "example": "String"
+            "example": "String",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
           },
           "businessName": {
             "type": "string",
             "description": "The name of the business.",
-            "example": "Business Name"
+            "example": "Business Name",
+            "pattern": "^[A-Za-z0-9 \\-,.&'\\\\/]{1,105}$"
           },
           "dateBusinessCeased": {
             "type": "string",
@@ -29,12 +31,14 @@
           "businessDescription": {
             "type": "string",
             "description": "A description of the business.",
-            "example": "Description"
+            "example": "Description",
+            "pattern": "^[A-Za-z0-9 \\-,.&'\\\\/]{2,35}$"
           },
           "incomeSource": {
             "type": "string",
             "description": "The income source",
-            "example": "string"
+            "example": "string",
+            "pattern": "^.{1,105}$"
           },
           "amount": {
             "type": "number",
