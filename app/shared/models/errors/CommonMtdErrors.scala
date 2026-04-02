@@ -37,6 +37,14 @@ object TransactionIdFormatError extends MtdError(code = "FORMAT_TRANSACTION_ID",
 
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The provided Country code is invalid", BAD_REQUEST)
 
+object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REFERENCE", "The provided customer reference is invalid", BAD_REQUEST)
+
+object BusinessNameFormatError extends MtdError("FORMAT_BUSINESS_NAME", "The provided business name is invalid", BAD_REQUEST)
+
+object BusinessDescriptionFormatError extends MtdError("FORMAT_BUSINESS_DESCRIPTION", "The provided business description is invalid", BAD_REQUEST)
+
+object IncomeSourceFormatError extends MtdError("FORMAT_INCOME_SOURCE", "The provided income source is invalid", BAD_REQUEST)
+
 object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99", BAD_REQUEST) {
 
   def forPathAndRange(path: String, min: String, max: String): MtdError =

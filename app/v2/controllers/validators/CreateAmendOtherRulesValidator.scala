@@ -19,9 +19,11 @@ package v2.controllers.validators
 import cats.data.Validated
 import cats.implicits.toFoldableOps
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers._
-import shared.models.errors.{DateFormatError, MtdError, RuleDateRangeInvalidError}
-import v2.models.request.createAmendOther._
+import shared.controllers.validators.resolvers.*
+import shared.models.errors.*
+import v2.models.request.createAmendOther.*
+
+import scala.util.matching.Regex
 
 object CreateAmendOtherRulesValidator extends RulesValidator[CreateAmendOtherRequest] with ResolverSupport {
 
@@ -58,6 +60,9 @@ object CreateAmendOtherRulesValidator extends RulesValidator[CreateAmendOtherReq
   private def resolveNonNegativeNumber(amount: BigDecimal, path: String): Validated[Seq[MtdError], BigDecimal] =
     ResolveParsedNumber()(amount, path)
 
+  private def resolveStringPattern(value: Option[String], pattern: Regex, error: MtdError): Validated[Seq[MtdError], Option[String]] =
+    ResolveStringPattern(pattern, error)(value)
+
   private def resolveDate(path: String) = {
     ResolveIsoDate(DateFormatError.withPath(path)).resolver
       .map(_.getYear)
@@ -79,6 +84,26 @@ object CreateAmendOtherRulesValidator extends RulesValidator[CreateAmendOtherReq
 
   private def validatePostCessationReceiptsItem(postCessationReceiptsItem: PostCessationReceiptsItem, arrayIndex: Int) = {
     combine(
+      resolveStringPattern(
+        value = postCessationReceiptsItem.customerReference,
+        pattern = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r,
+        error = CustomerReferenceFormatError.withPath(s"/postCessationReceipts/$arrayIndex/customerReference")
+      ),
+      resolveStringPattern(
+        value = postCessationReceiptsItem.businessName,
+        pattern = "^[A-Za-z0-9 \\-,.&'\\\\/]{1,105}$".r,
+        error = BusinessNameFormatError.withPath(s"/postCessationReceipts/$arrayIndex/businessName")
+      ),
+      resolveStringPattern(
+        value = postCessationReceiptsItem.businessDescription,
+        pattern = "^[A-Za-z0-9 \\-,.&'\\\\/]{2,35}$".r,
+        error = BusinessDescriptionFormatError.withPath(s"/postCessationReceipts/$arrayIndex/businessDescription")
+      ),
+      resolveStringPattern(
+        value = postCessationReceiptsItem.incomeSource,
+        pattern = "^.{1,105}$".r,
+        error = IncomeSourceFormatError.withPath(s"/postCessationReceipts/$arrayIndex/incomeSource")
+      ),
       resolveNonNegativeNumber(
         amount = postCessationReceiptsItem.amount,
         path = s"/postCessationReceipts/$arrayIndex/amount"
