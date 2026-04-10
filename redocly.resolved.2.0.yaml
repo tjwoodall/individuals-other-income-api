@@ -127,8 +127,9 @@ paths:
                     properties:
                       submittedOn:
                         type: string
-                        description: The date the other income was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ
-                        example: '2021-04-06T09:37:17Z'
+                        format: date-time
+                        description: The date the other income was added. It must be provided in the format `YYYY-MM-DDThh:mm:ss.SSSZ`
+                        example: '2021-04-06T09:37:17.000Z'
                       businessReceipts:
                         type: array
                         items: &ref_0
@@ -138,13 +139,13 @@ paths:
                             grossAmount:
                               type: number
                               description: The amount of post-cessation or other business receipts (business receipts taxed as income of an earlier year). The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             taxYear:
                               type: string
-                              description: The tax year where business receipts needed taxing as income. Date in the format YYYY-YY.
+                              description: The tax year where business receipts needed taxing as income. Date in the format `YYYY-YY`.
                               example: 2021-22
                           required:
                             - grossAmount
@@ -162,49 +163,49 @@ paths:
                             amountBeforeTax:
                               type: number
                               description: The total amount before any tax taken off other income. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             taxTakenOff:
                               type: number
                               description: The amount of tax taken off other income. The value must be between 1 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             specialWithholdingTax:
                               type: number
                               description: Special Withholding Tax (SWT) amount taken off this payment. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             foreignTaxCreditRelief:
                               type: boolean
                               description: Indicates whether Foreign Tax Credit Relief (FTCR) has been claimed. The value must be true or false.
-                              example: 'true'
+                              example: true
                             taxableAmount:
                               type: number
                               description: The amount of tax to be paid. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             residentialFinancialCostAmount:
                               type: number
                               description: The amount of residential property income or restricted finance costs. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             broughtFwdResidentialFinancialCostAmount:
                               type: number
                               description: The unused residential finance costs brought forward. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                           required:
                             - countryCode
                             - taxableAmount
@@ -215,10 +216,10 @@ paths:
                           gainAmount:
                             type: number
                             description: The gains amount on disposals of holdings in offshore funds. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                         required: &ref_3
                           - gainAmount
                       chargeableForeignBenefitsAndGifts:
@@ -228,38 +229,38 @@ paths:
                           transactionBenefit:
                             type: number
                             description: Benefit received on an overseas transaction. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                           protectedForeignIncomeSourceBenefit:
                             type: number
                             description: Benefit received on a protected foreign income source. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                           protectedForeignIncomeOnwardGift:
                             type: number
                             description: Protected foreign income gifted. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                           benefitReceivedAsASettler:
                             type: number
                             description: Benefit received as a settler. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                           onwardGiftReceivedAsASettler:
                             type: number
                             description: Gift received as a settler. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                       omittedForeignIncome:
                         type: object
                         description: The container that holds the key value for omitted foreign income.
@@ -267,10 +268,10 @@ paths:
                           amount:
                             type: number
                             description: The amount of omitted foreign income. The value must be between 0 and 99999999999.99 up to 2 decimal places.
-                            example: '1999.99'
+                            example: 1999.99
                             multipleOf: 0.01
                             minimum: 0
-                            'maximum:': 99999999999.99
+                            maximum: 99999999999.99
                         required: &ref_6
                           - amount
                     required:
@@ -282,8 +283,9 @@ paths:
                     properties:
                       submittedOn:
                         type: string
-                        description: The date the other income was added. It must be provided in the format YYYY-MM-DDThh:mm:ssZ
-                        example: '2021-04-06T09:37:17Z'
+                        format: date-time
+                        description: The date the other income was added. It must be provided in the format `YYYY-MM-DDThh:mm:ss.SSSZ`
+                        example: '2021-04-06T09:37:17.000Z'
                       postCessationReceipts:
                         type: array
                         items: &ref_14
@@ -291,35 +293,40 @@ paths:
                           description: Details of sum received related to the carrying on of the trade after a business ceases to carry on.
                           properties:
                             customerReference:
-                              type: String
+                              type: string
                               description: A reference the user supplies to identify the other income. Must be between 1 and 90 characters in length.
                               example: String
+                              pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             businessName:
                               type: string
                               description: The name of the business.
                               example: Business Name
+                              pattern: ^[A-Za-z0-9 \-,.&'\\/]{1,105}$
                             dateBusinessCeased:
                               type: string
-                              description: The business cessation date. Date in the format YYYY-MM-DD
+                              description: The business cessation date. Date in the format `YYYY-MM-DD`
+                              format: date
                               example: '2023-06-16'
                             businessDescription:
                               type: string
                               description: A description of the business.
                               example: Description
+                              pattern: ^[A-Za-z0-9 \-,.&'\\/]{2,35}$
                             incomeSource:
                               type: string
                               description: The income source
                               example: string
+                              pattern: ^.{1,105}$
                             amount:
                               type: number
                               description: The amount of income. Monetary value (to 2 decimal places), between 0 and 99999999999.99
-                              example: '1999.99'
+                              example: 1999.99
                               multipleOf: 0.01
                               minimum: 0
-                              'maximum:': 99999999999.99
+                              maximum: 99999999999.99
                             taxYearIncomeToBeTaxed:
                               type: string
-                              description: The tax year for income to be taxed. Date in the format YYYY-YY, for example 2019-20 for the 19/20 tax year.
+                              description: The tax year for income to be taxed. Date in the format `YYYY-YY`, for example 2019-20 for the 19/20 tax year.
                               example: 2021-22
                           required:
                             - amount
@@ -679,6 +686,26 @@ paths:
                   value:
                     code: FORMAT_DATE
                     message: The supplied date format is not valid
+                FORMAT_CUSTOMER_REFERENCE:
+                  description: The format of the supplied customer reference field is not valid.
+                  value:
+                    code: FORMAT_CUSTOMER_REFERENCE
+                    message: The provided customer reference is invalid
+                FORMAT_BUSINESS_NAME:
+                  description: The format of the supplied business name field is not valid.
+                  value:
+                    code: FORMAT_BUSINESS_NAME
+                    message: The provided business name is invalid
+                FORMAT_BUSINESS_DESCRIPTION:
+                  description: The format of the supplied business description field is not valid.
+                  value:
+                    code: FORMAT_BUSINESS_DESCRIPTION
+                    message: The provided business description is invalid
+                FORMAT_INCOME_SOURCE:
+                  description: The format of the supplied income source field is not valid.
+                  value:
+                    code: FORMAT_INCOME_SOURCE
+                    message: The provided income source is invalid
                 RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
                   description: An empty or non-matching body was submitted.
                   value:
