@@ -67,6 +67,30 @@ components:
       value:
         code: FORMAT_DATE
         message: The supplied date format is not valid
+        
+    formatCustomerReference:    
+      description: The format of the supplied customer reference field is not valid.
+      value:
+        code: FORMAT_CUSTOMER_REFERENCE
+        message: The provided customer reference is invalid
+    
+    formatBusinessName:    
+      description: The format of the supplied business name field is not valid.
+      value:
+        code: FORMAT_BUSINESS_NAME
+        message: The provided business name is invalid
+        
+    formatBusinessDescription:    
+      description: The format of the supplied business description field is not valid.
+      value:
+        code: FORMAT_BUSINESS_DESCRIPTION
+        message: The provided business description is invalid
+        
+    formatIncomeSource:    
+      description: The format of the supplied income source field is not valid.
+      value:
+        code: FORMAT_INCOME_SOURCE
+        message: The provided income source is invalid
 
     formatStartDate:
       description: The format of the supplied start date field is not valid.
