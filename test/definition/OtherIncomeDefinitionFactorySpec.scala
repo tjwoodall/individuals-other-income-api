@@ -20,7 +20,7 @@ import api.config.Deprecation.NotDeprecated
 import api.config.MockAppConfig
 import api.definition.APIStatus.BETA
 import api.definition.{APIDefinition, APIVersion, Definition}
-import api.routing.Version2
+import api.routing.{Version2, Version3}
 import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
 
@@ -31,7 +31,7 @@ class OtherIncomeDefinitionFactorySpec extends UnitSpec with MockAppConfig {
       "return a valid Definition case class" in {
         MockedAppConfig.apiGatewayContext returns "individuals/other-income"
 
-        List(Version2).foreach { version =>
+        List(Version2, Version3).foreach { version =>
           MockedAppConfig.apiStatus(version) returns "BETA"
           MockedAppConfig.endpointsEnabled(version) returns true
           MockedAppConfig.deprecationFor(version).returns(NotDeprecated.valid).anyNumberOfTimes()
@@ -49,6 +49,11 @@ class OtherIncomeDefinitionFactorySpec extends UnitSpec with MockAppConfig {
               versions = List(
                 APIVersion(
                   Version2,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  Version3,
                   status = BETA,
                   endpointsEnabled = true
                 )
