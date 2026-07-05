@@ -35,7 +35,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/other_retrieve/def1/other_retrieve_response.json'
             - $ref: './schemas/other_retrieve/def2/other_retrieve_response.json'
         examples:
