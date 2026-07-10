@@ -25,8 +25,8 @@ import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import v3.fixtures.Def1_RetrieveOtherControllerFixture
-import v3.fixtures.Def1_RetrieveOtherControllerFixture.fullRetrieveOtherResponse
+import v3.retrieveOther.def1.Def1_RetrieveOtherControllerFixture
+import v3.retrieveOther.def1.Def1_RetrieveOtherControllerFixture.fullRetrieveOtherResponse
 
 class Def1_RetrieveOtherControllerISpec extends IntegrationBaseSpec {
 
