@@ -28,8 +28,9 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v3.controllers.validators.MockDeleteOtherValidatorFactory
+import v3.deleteOther.DeleteOtherController
+import v3.deleteOther.model.request.DeleteOtherRequest
 import v3.mocks.services.MockDeleteOtherService
-import v3.models.request.deleteOther.DeleteOtherRequest
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

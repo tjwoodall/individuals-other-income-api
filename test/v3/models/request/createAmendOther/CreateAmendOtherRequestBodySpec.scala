@@ -18,6 +18,7 @@ package v3.models.request.createAmendOther
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsValue, Json}
+import v3.createAmendOther.model.request.CreateAmendOtherRequestBody
 import v3.fixtures.other.CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel, requestBodyWithPCRJson}
 
 class CreateAmendOtherRequestBodySpec extends UnitSpec {

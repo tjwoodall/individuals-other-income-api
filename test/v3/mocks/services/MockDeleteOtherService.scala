@@ -21,8 +21,8 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.models.request.deleteOther.DeleteOtherRequest
-import v3.services.DeleteOtherService
+import v3.deleteOther.DeleteOtherService
+import v3.deleteOther.model.request.DeleteOtherRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 

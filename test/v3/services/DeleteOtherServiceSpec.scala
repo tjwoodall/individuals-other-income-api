@@ -21,8 +21,9 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
+import v3.deleteOther.DeleteOtherService
+import v3.deleteOther.model.request.DeleteOtherRequest
 import v3.mocks.connectors.MockDeleteOtherConnector
-import v3.models.request.deleteOther.DeleteOtherRequest
 
 import scala.concurrent.Future
 

@@ -21,8 +21,8 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.connectors.DeleteOtherConnector
-import v3.models.request.deleteOther.DeleteOtherRequest
+import v3.deleteOther.DeleteOtherConnector
+import v3.deleteOther.model.request.DeleteOtherRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 

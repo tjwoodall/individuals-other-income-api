@@ -21,9 +21,9 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.models.request.retrieveOther.RetrieveOtherRequest
-import v3.models.response.retrieveOther.RetrieveOtherResponse
-import v3.services.RetrieveOtherService
+import v3.retrieveOther.RetrieveOtherService
+import v3.retrieveOther.model.request.RetrieveOtherRequestData
+import v3.retrieveOther.model.response.RetrieveOtherResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,10 +33,10 @@ trait MockRetrieveOtherService extends TestSuite with MockFactory {
 
   object MockRetrieveOtherService {
 
-    def retrieve(requestData: RetrieveOtherRequest): CallHandler[Future[ServiceOutcome[RetrieveOtherResponse]]] = {
+    def retrieve(requestData: RetrieveOtherRequestData): CallHandler[Future[ServiceOutcome[RetrieveOtherResponse]]] = {
       (
         mockRetrieveOtherService
-          .retrieve(_: RetrieveOtherRequest)(
+          .retrieve(_: RetrieveOtherRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

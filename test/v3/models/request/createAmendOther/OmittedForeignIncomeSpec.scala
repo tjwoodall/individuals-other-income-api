@@ -18,6 +18,7 @@ package v3.models.request.createAmendOther
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsObject, Json}
+import v3.createAmendOther.model.request.OmittedForeignIncome
 import v3.fixtures.other.CreateAmendOtherFixtures.{omittedForeignIncomeJson, omittedForeignIncomeModel}
 
 class OmittedForeignIncomeSpec extends UnitSpec {

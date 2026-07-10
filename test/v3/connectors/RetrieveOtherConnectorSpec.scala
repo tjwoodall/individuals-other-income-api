@@ -21,8 +21,11 @@ import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import uk.gov.hmrc.http.StringContextOps
-import v3.models.request.retrieveOther.RetrieveOtherRequest
-import v3.models.response.retrieveOther.RetrieveOtherResponse
+import v3.retrieveOther.RetrieveOtherConnector
+import v3.retrieveOther.def1.model.request.Def1_RetrieveOtherRequestData
+import v3.retrieveOther.def1.model.response.Def1_RetrieveOtherResponse
+import v3.retrieveOther.model.request.RetrieveOtherRequestData
+import v3.retrieveOther.model.response.RetrieveOtherResponse
 
 import scala.concurrent.Future
 
@@ -60,12 +63,11 @@ class RetrieveOtherConnectorSpec extends ConnectorSpec {
     protected val nino: String = "AA111111A"
     def taxYear: TaxYear       = TaxYear.fromMtd("2019-20")
 
-    val request: RetrieveOtherRequest =
-      RetrieveOtherRequest(Nino(nino), taxYear)
+    val request: RetrieveOtherRequestData =
+      Def1_RetrieveOtherRequestData(Nino(nino), taxYear)
 
-    val response: RetrieveOtherResponse = RetrieveOtherResponse(
+    val response: RetrieveOtherResponse = Def1_RetrieveOtherResponse(
       submittedOn = Timestamp("2019-04-04T01:01:01.000Z"),
-      postCessationReceipts = None,
       businessReceipts = None,
       allOtherIncomeReceivedWhilstAbroad = None,
       overseasIncomeAndGains = None,

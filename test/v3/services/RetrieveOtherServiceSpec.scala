@@ -23,8 +23,9 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.mocks.connectors.MockRetrieveOtherConnector
-import v3.models.request.retrieveOther.RetrieveOtherRequest
-import v3.models.response.retrieveOther.RetrieveOtherResponse
+import v3.retrieveOther.RetrieveOtherService
+import v3.retrieveOther.def1.model.request.Def1_RetrieveOtherRequestData
+import v3.retrieveOther.def1.model.response.Def1_RetrieveOtherResponse
 
 import scala.concurrent.Future
 
@@ -33,8 +34,7 @@ class RetrieveOtherServiceSpec extends ServiceSpec {
   "RetrieveOtherService" should {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new Test {
-        val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherResponse]] = Right(ResponseWrapper(correlationId, response))
-
+        val outcome = Right(ResponseWrapper(correlationId, response))
         MockRetrieveOtherConnector
           .retrieve(request)
           .returns(Future.successful(outcome))
@@ -78,14 +78,13 @@ class RetrieveOtherServiceSpec extends ServiceSpec {
     private val nino    = "AA112233A"
     private val taxYear = "2019-20"
 
-    val request: RetrieveOtherRequest = RetrieveOtherRequest(
+    val request: Def1_RetrieveOtherRequestData = Def1_RetrieveOtherRequestData(
       nino = Nino(nino),
       taxYear = TaxYear.fromMtd(taxYear)
     )
 
-    val response: RetrieveOtherResponse = RetrieveOtherResponse(
+    val response: Def1_RetrieveOtherResponse = Def1_RetrieveOtherResponse(
       submittedOn = Timestamp("2019-04-04T01:01:01.000Z"),
-      postCessationReceipts = None,
       businessReceipts = None,
       allOtherIncomeReceivedWhilstAbroad = None,
       overseasIncomeAndGains = None,

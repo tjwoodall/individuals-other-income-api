@@ -18,6 +18,7 @@ package v3.models.request.createAmendOther
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsObject, Json}
+import v3.createAmendOther.model.request.ChargeableForeignBenefitsAndGifts
 import v3.fixtures.other.CreateAmendOtherFixtures.{chargeableForeignBenefitsAndGiftsJson, chargeableForeignBenefitsAndGiftsModel}
 
 class ChargeableForeignBenefitsAndGiftsSpec extends UnitSpec {

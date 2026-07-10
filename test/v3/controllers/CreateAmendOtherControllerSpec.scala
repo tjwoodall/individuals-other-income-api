@@ -28,9 +28,10 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import v3.controllers.validators.MockCreateAmendOtherValidatorFactory
+import v3.createAmendOther.CreateAmendOtherController
+import v3.createAmendOther.model.request.*
 import v3.fixtures.other.CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel}
 import v3.mocks.services.MockCreateAmendOtherService
-import v3.models.request.createAmendOther.*
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

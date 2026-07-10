@@ -22,8 +22,9 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import play.api.libs.json.*
+import v3.createAmendOther.CreateAmendOtherValidator
+import v3.createAmendOther.model.request.{CreateAmendOtherRequest, CreateAmendOtherRequestBody, PostCessationReceiptsItem}
 import v3.fixtures.other.CreateAmendOtherFixtures.*
-import v3.models.request.createAmendOther.{CreateAmendOtherRequest, CreateAmendOtherRequestBody, PostCessationReceiptsItem}
 
 class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 

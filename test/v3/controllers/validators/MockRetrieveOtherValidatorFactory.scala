@@ -18,13 +18,14 @@ package v3.controllers.validators
 
 import api.controllers.validators.{MockValidatorFactory, Validator}
 import org.scalamock.handlers.CallHandler
-import v3.models.request.retrieveOther.RetrieveOtherRequest
+import v3.retrieveOther.RetrieveOtherValidatorFactory
+import v3.retrieveOther.model.request.RetrieveOtherRequestData
 
-trait MockRetrieveOtherValidatorFactory extends MockValidatorFactory[RetrieveOtherRequest] {
+trait MockRetrieveOtherValidatorFactory extends MockValidatorFactory[RetrieveOtherRequestData] {
 
   val mockRetrieveOtherValidatorFactory: RetrieveOtherValidatorFactory = mock[RetrieveOtherValidatorFactory]
 
-  def validator(): CallHandler[Validator[RetrieveOtherRequest]] =
+  def validator(): CallHandler[Validator[RetrieveOtherRequestData]] =
     (mockRetrieveOtherValidatorFactory.validator(_: String, _: String)).expects(*, *)
 
 }

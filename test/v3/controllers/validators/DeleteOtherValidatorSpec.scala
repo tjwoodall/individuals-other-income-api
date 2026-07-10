@@ -21,7 +21,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
-import v3.models.request.deleteOther.DeleteOtherRequest
+import v3.deleteOther.DeleteOtherValidator
+import v3.deleteOther.model.request.DeleteOtherRequest
 
 class DeleteOtherValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 

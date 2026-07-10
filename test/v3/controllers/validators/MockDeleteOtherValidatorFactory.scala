@@ -18,7 +18,8 @@ package v3.controllers.validators
 
 import api.controllers.validators.{MockValidatorFactory, Validator}
 import org.scalamock.handlers.CallHandler
-import v3.models.request.deleteOther.DeleteOtherRequest
+import v3.deleteOther.DeleteOtherValidatorFactory
+import v3.deleteOther.model.request.DeleteOtherRequest
 
 trait MockDeleteOtherValidatorFactory extends MockValidatorFactory[DeleteOtherRequest] {
 

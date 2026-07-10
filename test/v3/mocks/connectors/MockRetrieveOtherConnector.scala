@@ -21,9 +21,9 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
-import v3.connectors.RetrieveOtherConnector
-import v3.models.request.retrieveOther.RetrieveOtherRequest
-import v3.models.response.retrieveOther.RetrieveOtherResponse
+import v3.retrieveOther.RetrieveOtherConnector
+import v3.retrieveOther.model.request.RetrieveOtherRequestData
+import v3.retrieveOther.model.response.RetrieveOtherResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -33,9 +33,9 @@ trait MockRetrieveOtherConnector extends TestSuite with MockFactory {
 
   object MockRetrieveOtherConnector {
 
-    def retrieve(requestData: RetrieveOtherRequest): CallHandler[Future[DownstreamOutcome[RetrieveOtherResponse]]] =
+    def retrieve(requestData: RetrieveOtherRequestData): CallHandler[Future[DownstreamOutcome[RetrieveOtherResponse]]] =
       (mockRetrieveOtherConnector
-        .retrieve(_: RetrieveOtherRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .retrieve(_: RetrieveOtherRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
 
   }

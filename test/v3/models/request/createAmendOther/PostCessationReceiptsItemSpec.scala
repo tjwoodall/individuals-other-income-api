@@ -18,6 +18,7 @@ package v3.models.request.createAmendOther
 
 import api.utils.UnitSpec
 import play.api.libs.json.*
+import v3.createAmendOther.model.request.PostCessationReceiptsItem
 
 class PostCessationReceiptsItemSpec extends UnitSpec {
 

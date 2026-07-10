@@ -24,10 +24,12 @@ import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.mvc.Result
 import v3.controllers.validators.MockRetrieveOtherValidatorFactory
-import v3.fixtures.RetrieveOtherControllerFixture.fullRetrieveOtherResponse
+import v3.fixtures.Def1_RetrieveOtherControllerFixture.fullRetrieveOtherResponse
 import v3.mocks.services.MockRetrieveOtherService
-import v3.models.request.retrieveOther.RetrieveOtherRequest
-import v3.models.response.retrieveOther.*
+import v3.retrieveOther.RetrieveOtherController
+import v3.retrieveOther.def1.model.request.Def1_RetrieveOtherRequestData
+import v3.retrieveOther.def1.model.response.*
+import v3.retrieveOther.model.request.RetrieveOtherRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,21 +43,9 @@ class RetrieveOtherControllerSpec
 
   val taxYear: String = "2019-20"
 
-  val requestData: RetrieveOtherRequest = RetrieveOtherRequest(
+  val requestData: RetrieveOtherRequestData = Def1_RetrieveOtherRequestData(
     nino = parsedNino,
     taxYear = TaxYear.fromMtd(taxYear)
-  )
-
-  private val postCessationReceiptsItemModel = List(
-    PostCessationReceiptsItem(
-      customerReference = Some("String"),
-      businessName = Some("LsMBEqEWnG9j,9JP9RpgkGmIcF2I30.NpxZRtgN3zA7-b8h-LvHvApdJtpY"),
-      dateBusinessCeased = Some("2023-06-01"),
-      businessDescription = Some("u2e'VarLXLa\\W&RHojlOZIqm9NDG"),
-      incomeSource = Some("string"),
-      amount = 99999999999.99,
-      taxYearIncomeToBeTaxed = "2019-20"
-    )
   )
 
   private val businessReceiptsItemModel = List(
@@ -104,9 +94,8 @@ class RetrieveOtherControllerSpec
 
   private val omittedForeignIncomeModel = OmittedForeignIncome(amount = 4000.99)
 
-  private val retrieveOtherResponseModel = RetrieveOtherResponse(
+  private val retrieveOtherResponseModel = Def1_RetrieveOtherResponse(
     submittedOn = Timestamp("2019-04-04T01:01:01.000Z"),
-    Some(postCessationReceiptsItemModel),
     Some(businessReceiptsItemModel),
     Some(allOtherIncomeReceivedWhilstAbroadItemModel),
     Some(overseasIncomeAndGainsModel),

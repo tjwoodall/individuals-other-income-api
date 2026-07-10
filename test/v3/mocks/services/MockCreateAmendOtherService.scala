@@ -21,8 +21,8 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.models.request.createAmendOther.CreateAmendOtherRequest
-import v3.services.CreateAmendOtherService
+import v3.createAmendOther.CreateAmendOtherService
+import v3.createAmendOther.model.request.CreateAmendOtherRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 

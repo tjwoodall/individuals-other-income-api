@@ -22,7 +22,8 @@ import api.mocks.MockHttpClient
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.models.request.deleteOther.DeleteOtherRequest
+import v3.deleteOther.DeleteOtherConnector
+import v3.deleteOther.model.request.DeleteOtherRequest
 
 import scala.concurrent.Future
 

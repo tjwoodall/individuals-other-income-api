@@ -23,9 +23,10 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import play.api.Configuration
+import v3.createAmendOther.CreateAmendOtherService
+import v3.createAmendOther.model.request.CreateAmendOtherRequest
 import v3.fixtures.other.CreateAmendOtherFixtures.*
 import v3.mocks.connectors.MockCreateAmendOtherConnector
-import v3.models.request.createAmendOther.CreateAmendOtherRequest
 
 import scala.concurrent.Future
 
