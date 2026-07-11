@@ -277,7 +277,7 @@ paths:
                     required:
                       - submittedOn
                   - $schema: http://json-schema.org/draft-04/schema#
-                    title: TY 2023-24 or later
+                    title: TY 2023-24 to TY 2025-26
                     description: Retrieve Other Income Request
                     type: object
                     properties:
@@ -358,7 +358,7 @@ paths:
                   description: Full Other Income Amendment
                   value:
                     $ref: ./examples/otherIncome/pre_TYS/retrieve_response.json
-                TY 2023-24 or later:
+                TY 2023-24 to TY 2025-26:
                   description: Full Other Income Amendment
                   value:
                     $ref: ./examples/otherIncome/2023_24/retrieve_response.json
@@ -410,9 +410,14 @@ paths:
                   value: &ref_18
                     code: RULE_TAX_YEAR_RANGE_INVALID
                     message: A tax year range of one year is required
+                RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED:
+                  description: This version of the API supports tax years up to, and including, 2025-26. For tax years 2026-27 onwards, a new version is in development.
+                  value: &ref_19
+                    code: RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED
+                    message: This version of the API supports tax years up to, and including, 2025-26. For tax years 2026-27 onwards, a new version is in development
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: &ref_19
+                  value: &ref_20
                     code: RULE_INCORRECT_GOV_TEST_SCENARIO
                     message: The supplied Gov-Test-Scenario is not valid
         '403':
@@ -438,7 +443,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: &ref_20
+                  value: &ref_21
                     code: CLIENT_OR_AGENT_NOT_AUTHORISED
                     message: The client or agent is not authorised
         '404':
@@ -462,7 +467,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: &ref_24
+                  value: &ref_25
                     code: MATCHING_RESOURCE_NOT_FOUND
                     message: Matching resource not found
         '422':
@@ -486,7 +491,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: &ref_21
+                  value: &ref_22
                     code: RULE_REQUEST_CANNOT_BE_FULFILLED
                     message: Custom (will vary in production depending on the actual error)
     put:
@@ -543,7 +548,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: &ref_22
+          schema: &ref_23
             type: string
             example: Bearer bb7fed3fe10dd235a2ccda3d50fb
           required: true
@@ -584,7 +589,7 @@ paths:
                       properties: *ref_5
                       required: *ref_6
                 - $schema: http://json-schema.org/draft-04/schema#
-                  title: TY 2023-24 or later
+                  title: TY 2023-24 to TY 2025-26
                   description: Create And Amend Other Income Request
                   type: object
                   properties:
@@ -616,7 +621,7 @@ paths:
                 description: Full Other Income Amendment
                 value:
                   $ref: ./examples/otherIncome/pre_TYS/amend_request.json
-              TY 2023-24 or later:
+              TY 2023-24 to TY 2025-26:
                 description: Full Other Income Amendment
                 value:
                   $ref: ./examples/otherIncome/2023_24/amend_request.json
@@ -665,6 +670,9 @@ paths:
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required.
                   value: *ref_18
+                RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED:
+                  description: This version of the API supports tax years up to, and including, 2025-26. For tax years 2026-27 onwards, a new version is in development.
+                  value: *ref_19
                 FORMAT_COUNTRY_CODE:
                   description: The format of the supplied country code is not valid.
                   value:
@@ -717,7 +725,7 @@ paths:
                     message: The tax year provided must be the same as the tax year of income to be taxed
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_19
+                  value: *ref_20
                 RULE_DATE_RANGE_INVALID:
                   description: The date provided is outside of the range 1900-01-01 to 2100-01-01
                   value:
@@ -725,7 +733,7 @@ paths:
                     message: The specified date range is invalid
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: &ref_23
+                  value: &ref_24
                     code: RULE_OUTSIDE_AMENDMENT_WINDOW
                     message: You are outside the amendment window
         '403':
@@ -751,7 +759,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_20
+                  value: *ref_21
         '422':
           description: Unprocessable Entity
           headers:
@@ -773,7 +781,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_21
+                  value: *ref_22
     delete:
       security:
         - User-Restricted:
@@ -819,7 +827,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_22
+          schema: *ref_23
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -872,12 +880,15 @@ paths:
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required.
                   value: *ref_18
+                RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED:
+                  description: This version of the API supports tax years up to, and including, 2025-26. For tax years 2026-27 onwards, a new version is in development.
+                  value: *ref_19
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_19
+                  value: *ref_20
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_23
+                  value: *ref_24
         '403':
           description: Forbidden
           headers:
@@ -901,7 +912,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_20
+                  value: *ref_21
         '404':
           description: Not Found
           headers:
@@ -923,7 +934,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: *ref_24
+                  value: *ref_25
         '422':
           description: Unprocessable Entity
           headers:
@@ -945,7 +956,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_21
+                  value: *ref_22
 components:
   securitySchemes:
     User-Restricted:
