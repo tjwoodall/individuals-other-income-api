@@ -27,7 +27,7 @@ class Def2_RetrieveOtherValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
 
   private val validNino    = "AA123456A"
-  private val validTaxYear = "2020-21"
+  private val validTaxYear = "2024-25"
 
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)

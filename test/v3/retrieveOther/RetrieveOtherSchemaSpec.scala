@@ -32,8 +32,8 @@ class RetrieveOtherSchemaSpec extends UnitSpec with MockAppConfig with ScalaChec
 
   "schema lookup" when {
     "a valid tax year is supplied" must {
-      "use Def1 schema for tax years between 2020-21 and 2023-24" in new Test {
-        forTaxYearsInRange(TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2023-24")) { taxYear =>
+      "use Def1 schema for tax years between 2020-21 and 2022-23" in new Test {
+        forTaxYearsInRange(TaxYear.fromMtd("2020-21"), TaxYear.fromMtd("2022-23")) { taxYear =>
           schemaFor(taxYear.asMtd) shouldBe Valid(Def1)
         }
       }

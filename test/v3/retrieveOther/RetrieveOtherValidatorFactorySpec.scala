@@ -36,7 +36,7 @@ class RetrieveOtherValidatorFactorySpec extends UnitSpec with MockAppConfig {
   "RetrieveOtherValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
       "return a Def1 validator" in new Test {
-        validatorFor("2023-24") shouldBe a[Def1_RetrieveOtherValidator]
+        validatorFor("2022-23") shouldBe a[Def1_RetrieveOtherValidator]
       }
     }
     "given a request corresponding to a Def2 schema" should {
