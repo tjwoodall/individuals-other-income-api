@@ -23,20 +23,19 @@ import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import play.api.Configuration
-import v3.createAmendOther.model.request.CreateAmendOtherRequest
-import CreateAmendOtherFixtures.*
-
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.requestBodyModel
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
 import scala.concurrent.Future
 
 class CreateAmendOtherServiceSpec extends ServiceSpec {
 
   private val nino    = "ZG903729C"
-  private val taxYear = "2019-20"
+  private val taxYear = "2025-26"
 
   trait Test extends MockCreateAmendOtherConnector with MockAppConfig {
     implicit val logContext: EndpointLogContext = EndpointLogContext("Other", "createAmend")
 
-    val createAmendOtherRequest: CreateAmendOtherRequest = CreateAmendOtherRequest(
+    val def1CreateAmendOtherRequestData: Def1_CreateAmendOtherRequestData = Def1_CreateAmendOtherRequestData(
       Nino(nino),
       TaxYear.fromMtd(taxYear),
       requestBodyModel
@@ -54,28 +53,28 @@ class CreateAmendOtherServiceSpec extends ServiceSpec {
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         MockCreateAmendOtherConnector
-          .createAmendOther(createAmendOtherRequest)
+          .createAmendOther(def1CreateAmendOtherRequestData)
           .returns(Future.successful(outcome))
 
         MockedAppConfig.featureSwitchConfig.returns(Configuration("postCessationReceipts.enabled" -> true))
 
-        await(service.createAmend(createAmendOtherRequest)) shouldBe outcome
+        await(service.createAmend(def1CreateAmendOtherRequestData)) shouldBe outcome
       }
 
       "return correct result for a success with PCR feature switch disabled" in new Test {
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
-        override val createAmendOtherRequest: CreateAmendOtherRequest = CreateAmendOtherRequest(
+        override val def1CreateAmendOtherRequestData: Def1_CreateAmendOtherRequestData = Def1_CreateAmendOtherRequestData(
           Nino(nino),
           TaxYear.fromMtd(taxYear),
           requestBodyModel.copy(postCessationReceipts = None)
         )
         MockCreateAmendOtherConnector
-          .createAmendOther(createAmendOtherRequest)
+          .createAmendOther(def1CreateAmendOtherRequestData)
           .returns(Future.successful(outcome))
 
         MockedAppConfig.featureSwitchConfig.returns(Configuration("postCessationReceipts.enabled" -> false))
 
-        await(service.createAmend(createAmendOtherRequest)) shouldBe outcome
+        await(service.createAmend(def1CreateAmendOtherRequestData)) shouldBe outcome
       }
 
       "map errors according to spec" when {
@@ -84,31 +83,27 @@ class CreateAmendOtherServiceSpec extends ServiceSpec {
           s"a $downstreamErrorCode error is returned from the service" in new Test {
 
             MockCreateAmendOtherConnector
-              .createAmendOther(createAmendOtherRequest)
+              .createAmendOther(def1CreateAmendOtherRequestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
             MockedAppConfig.featureSwitchConfig.returns(Configuration("postCessationReceipts.enabled" -> true))
 
-            await(service.createAmend(createAmendOtherRequest)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.createAmend(def1CreateAmendOtherRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val errors = List(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
-          ("INVALID_CORRELATIONID", InternalError),
+          ("INVALID_CORRELATION_ID", InternalError),
           ("INVALID_PAYLOAD", InternalError),
           ("SERVER_ERROR", InternalError),
           ("SERVICE_UNAVAILABLE", InternalError),
-          ("UNALIGNED_CESSATION_TAX_YEAR", RuleUnalignedCessationTaxYearError)
-        )
-
-        val extraTysErrors = List(
-          ("INVALID_CORRELATION_ID", InternalError),
+          ("UNALIGNED_CESSATION_TAX_YEAR", RuleUnalignedCessationTaxYearError),
           ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
+        errors.foreach(args => serviceError.tupled(args))
       }
     }
   }

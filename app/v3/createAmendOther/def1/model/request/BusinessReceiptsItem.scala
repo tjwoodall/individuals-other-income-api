@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther.def1.model.request
 
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-case class OverseasIncomeAndGains(gainAmount: BigDecimal)
+case class BusinessReceiptsItem(grossAmount: BigDecimal, taxYear: String)
 
-object OverseasIncomeAndGains {
-  implicit val reads: Reads[OverseasIncomeAndGains] = Json.reads[OverseasIncomeAndGains]
+object BusinessReceiptsItem {
+  implicit val reads: Reads[BusinessReceiptsItem] = Json.reads[BusinessReceiptsItem]
 
-  implicit val writes: OWrites[OverseasIncomeAndGains] = (JsPath \ "gainAmount").write[BigDecimal].contramap(_.gainAmount)
+  implicit val writes: OWrites[BusinessReceiptsItem] = (
+    (JsPath \ "grossAmount").write[BigDecimal] and
+      (JsPath \ "taxYear").write[String]
+  )(w => Tuple.fromProductTyped(w))
+
 }

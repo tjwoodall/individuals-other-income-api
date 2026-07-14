@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther.def1.model.request
 
-import api.utils.UnitSpec
-import play.api.libs.json.*
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-class PostCessationReceiptsItemSpec extends UnitSpec {
+case class OverseasIncomeAndGains(gainAmount: BigDecimal)
 
-  "PostCessationReceiptsItem" should {
-    "error when JSON is invalid" in {
-      Json
-        .parse("""{ 
-                 |"amount": "notANumber", 
-                 |"taxYearIncomeToBeTaxed" : "2014" 
-        }""".stripMargin)
-        .validate[PostCessationReceiptsItem] shouldBe a[JsError]
-    }
-  }
+object OverseasIncomeAndGains {
+  implicit val reads: Reads[OverseasIncomeAndGains] = Json.reads[OverseasIncomeAndGains]
 
+  implicit val writes: OWrites[OverseasIncomeAndGains] = (JsPath \ "gainAmount").write[BigDecimal].contramap(_.gainAmount)
 }

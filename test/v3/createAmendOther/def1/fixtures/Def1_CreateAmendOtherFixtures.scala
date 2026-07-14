@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther
+package v3.createAmendOther.def1.fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v3.createAmendOther.model.request.*
+import v3.createAmendOther.def1.model.request.*
 
-object CreateAmendOtherFixtures {
+object Def1_CreateAmendOtherFixtures {
 
   val postCessationReceiptsItem: PostCessationReceiptsItem = PostCessationReceiptsItem(
     customerReference = Some("String"),
@@ -28,7 +28,7 @@ object CreateAmendOtherFixtures {
     businessDescription = Some("Description"),
     incomeSource = Some("string"),
     amount = 99999999999.99,
-    taxYearIncomeToBeTaxed = "2019-20"
+    taxYearIncomeToBeTaxed = "2025-26"
   )
 
   val postCessationReceiptsItemJson: JsValue = Json.parse(
@@ -40,21 +40,21 @@ object CreateAmendOtherFixtures {
        | "businessDescription": "Description",
        | "incomeSource": "string",
        | "amount": 99999999999.99,
-       | "taxYearIncomeToBeTaxed": "2019-20"
+       | "taxYearIncomeToBeTaxed": "2025-26"
        | }
        |""".stripMargin
   )
 
   val businessReceiptsModel: BusinessReceiptsItem = BusinessReceiptsItem(
     grossAmount = 1000.99,
-    taxYear = "2018-19"
+    taxYear = "2024-25"
   )
 
   val businessReceiptsJson: JsValue = Json.parse(
     s"""
        |{
        |   "grossAmount": 1000.99,
-       |   "taxYear": "2018-19"
+       |   "taxYear": "2024-25"
        |}
        |""".stripMargin
   )
@@ -139,7 +139,7 @@ object CreateAmendOtherFixtures {
        |""".stripMargin
   )
 
-  val requestBodyModel: CreateAmendOtherRequestBody = CreateAmendOtherRequestBody(
+  val requestBodyModel: Def1_CreateAmendOtherRequestBody = Def1_CreateAmendOtherRequestBody(
     postCessationReceipts = Some(Seq(postCessationReceiptsItem)),
     businessReceipts = Some(Seq(businessReceiptsModel)),
     allOtherIncomeReceivedWhilstAbroad = Some(Seq(allOtherIncomeReceivedWhilstAbroadModel)),

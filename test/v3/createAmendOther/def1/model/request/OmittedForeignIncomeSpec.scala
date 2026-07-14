@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther.def1.model.request
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsObject, Json}
-import v3.createAmendOther.CreateAmendOtherFixtures.{businessReceiptsJson, businessReceiptsModel}
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.{omittedForeignIncomeJson, omittedForeignIncomeModel}
 
-class BusinessReceiptsItemSpec extends UnitSpec {
+class OmittedForeignIncomeSpec extends UnitSpec {
 
-  "BusinessReceiptsItem" when {
+  "OmittedForeignIncome" when {
     "read from valid JSON" should {
-      "produce the expected BusinessReceiptsItem object" in {
-        businessReceiptsJson.as[BusinessReceiptsItem] shouldBe businessReceiptsModel
+      "produce the expected OmittedForeignIncome object" in {
+        omittedForeignIncomeJson.as[OmittedForeignIncome] shouldBe omittedForeignIncomeModel
       }
     }
 
@@ -33,13 +33,13 @@ class BusinessReceiptsItemSpec extends UnitSpec {
       "produce a JsError" in {
         val invalidJson = JsObject.empty
 
-        invalidJson.validate[BusinessReceiptsItem] shouldBe a[JsError]
+        invalidJson.validate[OmittedForeignIncome] shouldBe a[JsError]
       }
     }
 
     "written to JSON" should {
       "produce the expected JsObject" in {
-        Json.toJson(businessReceiptsModel) shouldBe businessReceiptsJson
+        Json.toJson(omittedForeignIncomeModel) shouldBe omittedForeignIncomeJson
       }
     }
   }

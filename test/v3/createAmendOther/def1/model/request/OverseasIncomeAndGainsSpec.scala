@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther.def1.model.request
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsObject, Json}
-import v3.createAmendOther.CreateAmendOtherFixtures.{overseasIncomeAndGainsJson, overseasIncomeAndGainsModel}
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.{overseasIncomeAndGainsJson, overseasIncomeAndGainsModel}
 
 class OverseasIncomeAndGainsSpec extends UnitSpec {
 

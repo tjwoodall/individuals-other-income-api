@@ -22,24 +22,21 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
-import v3.createAmendOther.model.request.CreateAmendOtherRequest
-
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendOtherConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createAmend(
-      request: CreateAmendOtherRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createAmend(request: Def1_CreateAmendOtherRequestData)(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import request.*
 
-    val url = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Unit](s"income-tax/income/other/${taxYear.asTysDownstream}/$nino")
-    } else {
-      IfsUri[Unit](s"income-tax/income/other/$nino/${taxYear.asMtd}")
-    }
+    val url = IfsUri[Unit](s"income-tax/income/other/${taxYear.asTysDownstream}/$nino")
 
     put(body, url)
   }

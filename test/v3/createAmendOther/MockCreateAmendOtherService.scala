@@ -21,7 +21,7 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import v3.createAmendOther.model.request.CreateAmendOtherRequest
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockCreateAmendOtherService extends TestSuite with MockFactory {
 
   object MockCreateAmendOtherService {
 
-    def createAmend(requestData: CreateAmendOtherRequest): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def createAmend(requestData: Def1_CreateAmendOtherRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (mockCreateAmendOtherService
-        .createAmend(_: CreateAmendOtherRequest)(_: RequestContext, _: ExecutionContext))
+        .createAmend(_: Def1_CreateAmendOtherRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
     }
 

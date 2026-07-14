@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther
+package v3.createAmendOther.def1
 
 import api.config.MockAppConfig
 import api.models.domain.{Nino, TaxYear}
@@ -22,22 +22,22 @@ import api.models.errors.*
 import api.models.utils.JsonErrorValidators
 import api.utils.UnitSpec
 import play.api.libs.json.*
-import v3.createAmendOther.model.request.{CreateAmendOtherRequest, CreateAmendOtherRequestBody, PostCessationReceiptsItem}
-import CreateAmendOtherFixtures.*
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.*
+import v3.createAmendOther.def1.model.request.{Def1_CreateAmendOtherRequestBody, Def1_CreateAmendOtherRequestData, PostCessationReceiptsItem}
 
-class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class Def1_CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   private implicit val correlationId: String = "correlationId"
   private val validNino                      = "AA123456A"
-  private val validTaxYear                   = "2019-20"
+  private val validTaxYear                   = "2025-26"
 
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
   private val validRequestBodyJson: JsValue = requestBodyWithPCRJson
 
-  def validator(nino: String = validNino, taxYear: String = validTaxYear, body: JsValue) =
-    new CreateAmendOtherValidator(nino, taxYear, body)(mockAppConfig)
+  def validator(nino: String, taxYear: String, body: JsValue): Def1_CreateAmendOtherValidator =
+    new Def1_CreateAmendOtherValidator(nino, taxYear, body)
 
   private def validate(nino: String = validNino, taxYear: String = validTaxYear, body: JsValue) =
     validator(nino, taxYear, body).validateAndWrapResult()
@@ -55,10 +55,10 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
 
   "running a validation" should {
     "return no errors" when {
-      def requestWithTrailingSpaces: CreateAmendOtherRequest = CreateAmendOtherRequest(
+      def requestWithTrailingSpaces: Def1_CreateAmendOtherRequestData = Def1_CreateAmendOtherRequestData(
         parsedNino,
         parsedTaxYear,
-        CreateAmendOtherRequestBody(
+        Def1_CreateAmendOtherRequestBody(
           Some(
             Seq(PostCessationReceiptsItem(
               customerReference = Some("  String  "),
@@ -67,7 +67,7 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
               businessDescription = Some("  Description  "),
               incomeSource = Some("  string  "),
               99999999999.99,
-              "2019-20"
+              "2025-26"
             ))),
           None,
           None,
@@ -83,7 +83,7 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
            |}""".stripMargin)
 
       "a valid request is supplied" in new SetupConfig {
-        validate(body = validRequestBodyJson) shouldBe Right(CreateAmendOtherRequest(parsedNino, parsedTaxYear, requestBodyModel))
+        validate(body = validRequestBodyJson) shouldBe Right(Def1_CreateAmendOtherRequestData(parsedNino, parsedTaxYear, requestBodyModel))
       }
 
       "a valid request with trailing spaces is supplied" in new SetupConfig {
@@ -99,18 +99,6 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
     "return NinoFormatError error" when {
       "an invalid nino is supplied" in new SetupConfig {
         validate("A12344A", validTaxYear, validRequestBodyJson) shouldBe singleError(NinoFormatError)
-      }
-    }
-
-    "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new SetupConfig {
-        validate(validNino, "20178", validRequestBodyJson) shouldBe singleError(TaxYearFormatError)
-      }
-    }
-
-    "return RuleTaxYearNotSupportedError error" when {
-      "an invalid tax year is supplied" in new SetupConfig {
-        validate(validNino, "2017-18", validRequestBodyJson) shouldBe singleError(RuleTaxYearNotSupportedError)
       }
     }
 
@@ -187,11 +175,6 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
       "return DateFormatError when an invalid date is supplied" in new SetupConfig {
         validate(body = body(postCessationReceiptsItemJson.update("dateBusinessCeased", JsString("BAD_VALUE")))) shouldBe
           singleError(DateFormatError.withPath("/postCessationReceipts/0/dateBusinessCeased"))
-      }
-
-      "return RuleDateRangeInvalidError when an out-of-range date is supplied" in new SetupConfig {
-        validate(body = body(postCessationReceiptsItemJson.update("dateBusinessCeased", JsString("1899-01-01")))) shouldBe
-          singleError(RuleDateRangeInvalidError.withPath("/postCessationReceipts/0/dateBusinessCeased"))
       }
 
       "return CustomerReferenceFormatError when an invalid customer reference is supplied" in new SetupConfig {
@@ -357,13 +340,6 @@ class CreateAmendOtherValidatorSpec extends UnitSpec with JsonErrorValidators wi
                   ))
               ))
             ))
-      }
-    }
-
-    "return multiple errors" when {
-      "request supplied has multiple errors (path parameters)" in new SetupConfig {
-        validate("A12344A", "20178", validRequestBodyJson) shouldBe
-          Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

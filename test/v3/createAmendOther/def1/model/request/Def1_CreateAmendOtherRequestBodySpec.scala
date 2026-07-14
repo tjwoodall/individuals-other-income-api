@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther.def1.model.request
 
 import api.utils.UnitSpec
 import play.api.libs.json.{JsError, JsValue, Json}
-import v3.createAmendOther.CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel, requestBodyWithPCRJson}
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel, requestBodyWithPCRJson}
 
-class CreateAmendOtherRequestBodySpec extends UnitSpec {
+class Def1_CreateAmendOtherRequestBodySpec extends UnitSpec {
 
-  val emptyArraysModel: CreateAmendOtherRequestBody = CreateAmendOtherRequestBody(
+  val emptyArraysModel: Def1_CreateAmendOtherRequestBody = Def1_CreateAmendOtherRequestBody(
     postCessationReceipts = Some(Seq.empty),
     businessReceipts = Some(Seq.empty),
     allOtherIncomeReceivedWhilstAbroad = Some(Seq.empty),
@@ -44,23 +44,23 @@ class CreateAmendOtherRequestBodySpec extends UnitSpec {
   "CreateAmendOtherRequestBody" when {
     "read from valid JSON" should {
       "produce the expected CreateAmendOtherRequestBody object without postCessationReceipt" in {
-        requestBodyJson.as[CreateAmendOtherRequestBody] shouldBe requestBodyModel.copy(postCessationReceipts = None)
+        requestBodyJson.as[Def1_CreateAmendOtherRequestBody] shouldBe requestBodyModel.copy(postCessationReceipts = None)
       }
       "produce the expected CreateAmendOtherRequestBody object with postCessationReceipt" in {
-        requestBodyWithPCRJson.as[CreateAmendOtherRequestBody] shouldBe requestBodyModel
+        requestBodyWithPCRJson.as[Def1_CreateAmendOtherRequestBody] shouldBe requestBodyModel
       }
     }
 
     "read from JSON with all empty arrays" should {
       "return an error" in {
 
-        emptyJson.as[CreateAmendOtherRequestBody] shouldBe emptyArraysModel
+        emptyJson.as[Def1_CreateAmendOtherRequestBody] shouldBe emptyArraysModel
       }
     }
 
     "read from empty JSON" should {
       "produce an empty CreateAmendOtherRequestBody object" in {
-        emptyJson.as[CreateAmendOtherRequestBody] shouldBe emptyArraysModel
+        emptyJson.as[Def1_CreateAmendOtherRequestBody] shouldBe emptyArraysModel
       }
     }
 
@@ -79,7 +79,7 @@ class CreateAmendOtherRequestBodySpec extends UnitSpec {
           """.stripMargin
         )
 
-        invalidJson.validate[CreateAmendOtherRequestBody] shouldBe a[JsError]
+        invalidJson.validate[Def1_CreateAmendOtherRequestBody] shouldBe a[JsError]
       }
     }
 

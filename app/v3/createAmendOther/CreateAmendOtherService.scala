@@ -20,15 +20,14 @@ import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import v3.createAmendOther.model.request.CreateAmendOtherRequest
-
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector) extends BaseService {
 
-  def createAmend(request: CreateAmendOtherRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def createAmend(request: Def1_CreateAmendOtherRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
@@ -37,20 +36,16 @@ class CreateAmendOtherService @Inject() (connector: CreateAmendOtherConnector) e
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID"    -> NinoFormatError,
       "INVALID_TAX_YEAR"             -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"        -> InternalError,
+      "INVALID_CORRELATION_ID"       -> InternalError,
       "INVALID_PAYLOAD"              -> InternalError,
       "SERVER_ERROR"                 -> InternalError,
       "SERVICE_UNAVAILABLE"          -> InternalError,
-      "UNALIGNED_CESSATION_TAX_YEAR" -> RuleUnalignedCessationTaxYearError
+      "UNALIGNED_CESSATION_TAX_YEAR" -> RuleUnalignedCessationTaxYearError,
+      "OUTSIDE_AMENDMENT_WINDOW"     -> RuleOutsideAmendmentWindowError,
+      "TAX_YEAR_NOT_SUPPORTED"       -> RuleTaxYearNotSupportedError
     )
 
-    val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID"   -> InternalError,
-      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError,
-      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError
-    )
-
-    errors ++ extraTysErrors
+    errors
   }
 
 }

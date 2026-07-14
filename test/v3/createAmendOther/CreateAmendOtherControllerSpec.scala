@@ -27,9 +27,8 @@ import api.services.MockAuditService
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v3.createAmendOther.model.request.*
-import CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel}
-
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.{requestBodyJson, requestBodyModel}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -41,9 +40,9 @@ class CreateAmendOtherControllerSpec
     with MockCreateAmendOtherService
     with MockAppConfig {
 
-  val taxYear: String = "2019-20"
+  val taxYear: String = "2025-26"
 
-  val requestData: CreateAmendOtherRequest = CreateAmendOtherRequest(
+  val requestData: Def1_CreateAmendOtherRequestData = Def1_CreateAmendOtherRequestData(
     nino = parsedNino,
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestBodyModel

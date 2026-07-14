@@ -20,9 +20,8 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
-import v3.createAmendOther.model.request.CreateAmendOtherRequest
-import CreateAmendOtherFixtures.requestBodyModel
-
+import v3.createAmendOther.def1.model.request.Def1_CreateAmendOtherRequestData
+import v3.createAmendOther.def1.fixtures.Def1_CreateAmendOtherFixtures.requestBodyModel
 import scala.concurrent.Future
 
 class CreateAmendOtherConnectorSpec extends ConnectorSpec {
@@ -36,7 +35,7 @@ class CreateAmendOtherConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    lazy val createAmendOtherRequest: CreateAmendOtherRequest = CreateAmendOtherRequest(
+    lazy val def1CreateAmendOtherRequestData: Def1_CreateAmendOtherRequestData = Def1_CreateAmendOtherRequestData(
       nino = Nino("AA111111A"),
       taxYear = TaxYear.fromMtd(taxYear),
       body = requestBodyModel
@@ -47,29 +46,16 @@ class CreateAmendOtherConnectorSpec extends ConnectorSpec {
   "CreateAmendOtherConnector" when {
     "createAmend" must {
       "return a 204 status for a success scenario" in new IfsTest with Test {
-        val taxYear = "2019-20"
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        val taxYear                                        = "2025-26"
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = url"$baseUrl/income-tax/income/other/AA111111A/2019-20",
+          url = url"$baseUrl/income-tax/income/other/${TaxYear.fromMtd(taxYear).asTysDownstream}/AA111111A",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
 
-        await(connector.createAmend(createAmendOtherRequest)) shouldBe outcome
-      }
-
-      "return a 204 status for a success scenario for a Tax Year Specific (TYS) tax year" in new IfsTest with Test {
-        val taxYear = "2023-24"
-        val outcome = Right(ResponseWrapper(correlationId, ()))
-
-        willPut(
-          url = url"$baseUrl/income-tax/income/other/23-24/AA111111A",
-          body = requestBodyModel
-        )
-          .returns(Future.successful(outcome))
-
-        await(connector.createAmend(createAmendOtherRequest)) shouldBe outcome
+        await(connector.createAmend(def1CreateAmendOtherRequestData)) shouldBe outcome
       }
     }
   }

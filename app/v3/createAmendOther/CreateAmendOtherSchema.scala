@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther.model.request
+package v3.createAmendOther
 
-import play.api.libs.functional.syntax.*
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import api.config.AppConfig
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
+import cats.data.Validated
 
-case class BusinessReceiptsItem(grossAmount: BigDecimal, taxYear: String)
+sealed trait CreateAmendOtherSchema
 
-object BusinessReceiptsItem {
-  implicit val reads: Reads[BusinessReceiptsItem] = Json.reads[BusinessReceiptsItem]
+object CreateAmendOtherSchema {
 
-  implicit val writes: OWrites[BusinessReceiptsItem] = (
-    (JsPath \ "grossAmount").write[BigDecimal] and
-      (JsPath \ "taxYear").write[String]
-  )(w => Tuple.fromProductTyped(w))
+  case object Def1 extends CreateAmendOtherSchema
+
+  def schemaFor(taxYearString: String)(implicit appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendOtherSchema] =
+    ResolveTaxYearMinimum(TaxYear.ending(2026))(taxYearString).map(_ => Def1)
 
 }

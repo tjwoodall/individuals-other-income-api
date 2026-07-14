@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.createAmendOther
+package v3.createAmendOther.def1
 
 import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.*
@@ -22,11 +22,11 @@ import api.models.domain.TaxYear
 import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.toFoldableOps
-import v3.createAmendOther.model.request.*
+import v3.createAmendOther.def1.model.request.*
 
-object CreateAmendOtherRulesValidator extends RulesValidator[CreateAmendOtherRequest] with ResolverSupport {
+object Def1_CreateAmendOtherRulesValidator extends RulesValidator[Def1_CreateAmendOtherRequestData] with ResolverSupport {
 
-  def validateBusinessRules(parsed: CreateAmendOtherRequest): Validated[Seq[MtdError], CreateAmendOtherRequest] = {
+  def validateBusinessRules(parsed: Def1_CreateAmendOtherRequestData): Validated[Seq[MtdError], Def1_CreateAmendOtherRequestData] = {
     import parsed.body
 
     combine(
@@ -62,7 +62,6 @@ object CreateAmendOtherRulesValidator extends RulesValidator[CreateAmendOtherReq
   private def resolveDate(path: String) = {
     ResolveIsoDate(DateFormatError.withPath(path)).resolver
       .map(_.getYear)
-      .thenValidate(inRange(1900, 2099, RuleDateRangeInvalidError.withPath(path)))
   }
 
   private def validateBusinessReceipts(businessReceipts: BusinessReceiptsItem, arrayIndex: Int) =
