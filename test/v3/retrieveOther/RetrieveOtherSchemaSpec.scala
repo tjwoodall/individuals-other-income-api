@@ -39,7 +39,7 @@ class RetrieveOtherSchemaSpec extends UnitSpec with MockAppConfig with ScalaChec
       }
 
       "use Def2 schema for tax years 2023-24 onwards" in new Test {
-        forTaxYearsFrom(TaxYear.fromMtd("2024-25")) { taxYear =>
+        forTaxYearsFrom(TaxYear.fromMtd("2023-24")) { taxYear =>
           schemaFor(taxYear.asMtd) shouldBe Valid(Def2)
         }
       }
