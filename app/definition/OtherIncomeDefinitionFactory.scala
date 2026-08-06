@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package definition
 
 import api.config.AppConfig
 import api.definition.*
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.routing.{Version2, Version3}
 
 import javax.inject.{Inject, Singleton}
@@ -36,11 +37,13 @@ class OtherIncomeDefinitionFactory @Inject() (protected val appConfig: AppConfig
           APIVersion(
             version = Version2,
             status = buildAPIStatus(Version2),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version2)
           ),
           APIVersion(
             version = Version3,
             status = buildAPIStatus(Version3),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version3)
           )
         ),
