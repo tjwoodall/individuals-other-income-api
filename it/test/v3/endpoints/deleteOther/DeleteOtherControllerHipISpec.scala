@@ -21,18 +21,18 @@ import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.*
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, SERVICE_UNAVAILABLE, UNPROCESSABLE_ENTITY}
 import play.api.libs.json.Json
 import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 
-class DeleteOtherControllerISpec extends IntegrationBaseSpec {
+class DeleteOtherControllerHipISpec extends IntegrationBaseSpec {
 
   "Calling the 'delete other employment' endpoint" should {
     "return a 204 status code" when {
 
-      "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysIfsTest {
+      "any valid request with a Tax Year Specific (TYS) tax year is made" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -52,7 +52,7 @@ class DeleteOtherControllerISpec extends IntegrationBaseSpec {
 
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysIfsTest {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -81,7 +81,7 @@ class DeleteOtherControllerISpec extends IntegrationBaseSpec {
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -97,13 +97,20 @@ class DeleteOtherControllerISpec extends IntegrationBaseSpec {
           }
         }
 
-        def errorBody(code: String): String =
+        def errorBody(`type`: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "downstream message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "${`type`}",
+             |        "reason": "downstream message"
+             |      }
+             |    ]
+             |  }
              |}
-            """.stripMargin
+        """.stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
@@ -124,8 +131,6 @@ class DeleteOtherControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String = "AA123456A"
-    def taxYear: String
-    def downstreamUri: String
 
     def mtdUri: String = s"/$nino/$taxYear"
 
@@ -141,11 +146,10 @@ class DeleteOtherControllerISpec extends IntegrationBaseSpec {
         )
     }
 
-  }
+    def taxYear: String = "2025-26"
 
-  private trait TysIfsTest extends Test {
-    def taxYear: String       = "2025-26"
-    def downstreamUri: String = s"/income-tax/income/other/25-26/$nino"
+    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/income/other/$nino"
+
   }
 
 }
