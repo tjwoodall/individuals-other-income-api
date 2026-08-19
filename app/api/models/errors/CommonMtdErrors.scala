@@ -108,6 +108,12 @@ object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country c
 
 object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
 
+object RuleTaxDeductedExceedsAmountBeforeTaxError
+    extends MtdError("RULE_TAX_DEDUCTED_EXCEEDS_AMOUNT_BEFORE_TAX", "The supplied taxDeducted exceeds amountBeforeTax.", BAD_REQUEST)
+
+object RuleIncorrectBusinessCeasedDateError
+    extends MtdError("RULE_INCORRECT_BUSINESS_CEASED_DATE", "The supplied business ceased date is today or in the future.", BAD_REQUEST)
+
 //Stub Errors
 object RuleIncorrectGovTestScenarioError
     extends MtdError("RULE_INCORRECT_GOV_TEST_SCENARIO", "The supplied Gov-Test-Scenario is not valid", BAD_REQUEST)

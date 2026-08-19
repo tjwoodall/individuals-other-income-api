@@ -17,5 +17,6 @@
 package v3.createAmendOther.def1.model.request
 
 import api.models.domain.{Nino, TaxYear}
+import v3.createAmendOther.model.request.CreateAmendOtherRequestData
 
-case class Def1_CreateAmendOtherRequestData(nino: Nino, taxYear: TaxYear, body: Def1_CreateAmendOtherRequestBody)
+case class Def1_CreateAmendOtherRequestData(nino: Nino, taxYear: TaxYear, body: Def1_CreateAmendOtherRequestBody) extends CreateAmendOtherRequestData

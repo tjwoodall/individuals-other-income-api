@@ -17,6 +17,7 @@
 package v3.createAmendOther.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
+import v3.createAmendOther.model.request.CreateAmendOtherRequestBody
 
 case class Def1_CreateAmendOtherRequestBody(postCessationReceipts: Option[Seq[PostCessationReceiptsItem]],
                                             businessReceipts: Option[Seq[BusinessReceiptsItem]],
@@ -24,6 +25,7 @@ case class Def1_CreateAmendOtherRequestBody(postCessationReceipts: Option[Seq[Po
                                             overseasIncomeAndGains: Option[OverseasIncomeAndGains],
                                             chargeableForeignBenefitsAndGifts: Option[ChargeableForeignBenefitsAndGifts],
                                             omittedForeignIncome: Option[OmittedForeignIncome])
+    extends CreateAmendOtherRequestBody
 
 object Def1_CreateAmendOtherRequestBody {
 
