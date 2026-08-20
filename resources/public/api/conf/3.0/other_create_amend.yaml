@@ -37,12 +37,10 @@ requestBody:
       examples:
         TY 2025-26:
           description: Full Other Income Amendment
-          value:
-            $ref: './examples/other_create_amend/def1/request.json'
+          externalValue: './examples/other_create_amend/def1/request.json'
         TY 2026-27 onwards:
           description: Full Other Income Amendment
-          value:
-            $ref: './examples/other_create_amend/def2/request.json'
+          externalValue: './examples/other_create_amend/def2/request.json'
 responses:
   "204":
     description: No Content
