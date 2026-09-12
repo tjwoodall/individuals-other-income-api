@@ -37,11 +37,9 @@ requestBody:
           - $ref: './schemas/other_create_amend/def2/request.json'
       examples:
         Full Other Income Request for TY 2025-26:
-          value:
-            $ref: './examples/other_create_amend/def1/request.json'
+          externalValue: './examples/other_create_amend/def1/request.json'
         Full Other Income Request for TY 2026-27 onwards:
-          value:
-            $ref: './examples/other_create_amend/def2/request.json'
+          externalValue: './examples/other_create_amend/def2/request.json'
 responses:
   "204":
     description: No Content
