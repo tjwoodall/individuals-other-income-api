@@ -1,0 +1,111 @@
+summary: "Create and Amend Other Income [test only]"
+description: |
+  This endpoint enables you to create and amend other income:
+  post-cessation receipts, business receipts, all other income received whilst abroad, overseas income and gains,
+  chargeable foreign benefits and gifts, omitted foreign income, benefits from pre-owned assets and additional taxable income.
+  A National Insurance number and tax year must be provided.
+
+  ###  Test data
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                                  |
+  | -------------------------------- | --------------------------------------------------------------------------------------------------------- |
+  | N/A - DEFAULT                    | Simulates success response.                                                                               |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.           |
+  | STATEFUL                         | Performs a stateful create or update.                                                                     |
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYearMinimum2025'
+  - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+
+security:
+  - User-Restricted:
+      - write:self-assessment
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - $ref: './schemas/other_create_amend/def1/request.json'
+          - $ref: './schemas/other_create_amend/def2/request.json'
+      examples:
+        Full Other Income Request for TY 2025-26:
+          value:
+            $ref: './examples/other_create_amend/def1/request.json'
+        Full Other Income Request for TY 2026-27 onwards:
+          value:
+            $ref: './examples/other_create_amend/def2/request.json'
+responses:
+  "204":
+    description: No Content
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+  "400":
+    description: Bad request
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error_response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_TAX_YEAR:
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
+          RULE_TAX_YEAR_RANGE_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearRangeInvalid'
+          FORMAT_COUNTRY_CODE:
+            $ref: './common/errors.yaml#/components/examples/formatCountryCode'
+          RULE_COUNTRY_CODE:
+            $ref: './common/errors.yaml#/components/examples/ruleCountryCode'
+          FORMAT_VALUE:
+            $ref: './common/errors.yaml#/components/examples/formatValue'
+          FORMAT_DATE:
+            $ref: './common/errors.yaml#/components/examples/formatDate'
+          FORMAT_CUSTOMER_REFERENCE:
+            $ref: './common/errors.yaml#/components/examples/formatCustomerReference'
+          FORMAT_BUSINESS_NAME:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessName'
+          FORMAT_BUSINESS_DESCRIPTION:
+            $ref: './common/errors.yaml#/components/examples/formatBusinessDescription'
+          FORMAT_INCOME_SOURCE:
+            $ref: './common/errors.yaml#/components/examples/formatIncomeSource'
+          FORMAT_TYPE_OF_ASSET:
+            $ref: './common/errors.yaml#/components/examples/formatTypeOfAsset'
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_UNALIGNED_CESSATION_TAX_YEAR:
+            $ref: './common/errors.yaml#/components/examples/ruleUnalignedCessationTaxYear'
+          RULE_INCORRECT_GOV_TEST_SCENARIO:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+          RULE_OUTSIDE_AMENDMENT_WINDOW:
+            $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
+          RULE_TAX_DEDUCTED_EXCEEDS_AMOUNT_BEFORE_TAX:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxDeductedExceedsAmountBeforeTax'
+          RULE_INCORRECT_BUSINESS_CEASED_DATE:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectBusinessCeasedDate'
+
+  "403":
+    description: Forbidden
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error_response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
